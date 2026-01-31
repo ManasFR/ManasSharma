@@ -7,7 +7,7 @@
     
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=clash-display@600,700,500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-<link rel="icon" type="image/png" href="./fvcion.png">
+    <link rel="icon" type="image/png" href="./fvcion.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
@@ -256,99 +256,117 @@
         .stat-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         /* =========================================
-           UPDATED HISTORY SECTION
+           JOURNEY LOG - SIMPLE 4 CARDS GRID
            ========================================= */
-        .history-section { padding: 5rem 0; }
-        
-        .history-grid {
+        .history-section {
+            padding-bottom: 8rem;
+        }
+
+        .journey-cards-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5rem;
-            position: relative;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* Left Side: Timeline */
-        .timeline { 
-            position: relative; 
-            border-left: 1px solid var(--border); 
-            padding-left: 3rem; 
-        }
-        .timeline-item { 
-            position: relative; 
-            margin-bottom: 8rem; /* More space to scroll */
-            opacity: 0.3; /* Default dimmed */
-            transform: translateY(20px);
-            transition: opacity 0.5s;
-        }
-        .timeline-item.active {
-            opacity: 1;
-        }
-        
-        .timeline-dot {
-            position: absolute; left: -3.35rem; top: 0.5rem;
-            width: 12px; height: 12px; background: var(--text-muted);
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-        .timeline-item.active .timeline-dot {
-            background: var(--accent);
-            box-shadow: 0 0 15px var(--accent);
-            transform: scale(1.3);
-        }
-
-        .t-year { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .t-role { font-size: 2rem; font-weight: 500; margin-bottom: 0.5rem; }
-        .t-company { color: var(--accent); margin-bottom: 1rem; display: block; }
-        .t-desc { color: var(--text-muted); max-width: 600px; line-height: 1.6; }
-
-        /* Right Side: Sticky Visuals */
-        .history-visual {
-            position: sticky;
-            top: 20vh;
-            height: 60vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid var(--border);
+        .journey-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .visual-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
+            border: 2px solid var(--border);
+            padding: 3rem;
+            min-height: 400px;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
         }
 
-        .v-core {
-            width: 50px; height: 50px;
-            background: var(--text-main);
-            position: absolute;
-            z-index: 10;
-            border-radius: 5px; /* Animated via JS */
+        /* Hover Effect */
+        .journey-card:hover {
+            border-color: var(--accent);
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4), 
+                0 0 0 1px var(--accent),
+                0 0 50px rgba(212, 255, 0, 0.15);
+            transform: translateY(-10px);
         }
 
-        .v-ring {
+        /* Card Glow on Hover */
+        .card-glow {
             position: absolute;
-            border: 1px solid var(--text-muted);
-            border-radius: 50%;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, var(--accent), transparent 70%);
             opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
         }
-        .v-ring-1 { width: 100px; height: 100px; border-style: dashed; }
-        .v-ring-2 { width: 180px; height: 180px; border-color: var(--accent); opacity: 0; }
-        .v-ring-3 { width: 260px; height: 260px; border: 2px solid var(--text-main); opacity: 0; }
 
-        .v-year-display {
+        .journey-card:hover .card-glow { 
+            opacity: 0.08; 
+        }
+
+        /* Company Letter on Hover */
+        .company-letter {
             position: absolute;
-            bottom: 20px; right: 20px;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 8rem;
             font-family: var(--font-display);
-            font-size: 4rem;
-            color: rgba(255,255,255,0.05);
             font-weight: 700;
+            color: var(--accent);
+            opacity: 0;
+            transition: all 0.5s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .journey-card:hover .company-letter {
+            opacity: 0.15;
+            left: -20px;
+            top: -80px;
+            transform: translateY(0);
+        }
+
+        /* Card Content */
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .t-year {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-body);
+        }
+
+        .t-role {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .t-company {
+            display: inline-block;
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .t-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
         }
 
         /* =========================================
@@ -450,7 +468,7 @@
             opacity: 1;
             filter: grayscale(0%);
             background: rgba(255, 255, 255, 0.02);
-            padding-left: 10px; /* Slight shift via CSS fallback */
+            padding-left: 10px;
         }
         body.light-mode .project-list:hover .project-row:hover {
             background: rgba(0,0,0,0.03);
@@ -492,12 +510,23 @@
         @media (max-width: 768px) {
             .hero-meta { flex-direction: column; align-items: flex-start; gap: 2rem; }
             .about-grid { grid-template-columns: 1fr; }
-            .history-grid { grid-template-columns: 1fr; }
-            .history-visual { display: none; } /* Hide visual on mobile */
+            .journey-cards-grid { grid-template-columns: 1fr; }
             .project-row { grid-template-columns: 1fr; }
             .p-title { font-size: 2rem; }
             .bulb-container { right: 20px; }
-            .timeline-item { opacity: 1; }
+            
+            .journey-card {
+                min-height: 350px;
+                padding: 2rem;
+            }
+            
+            .t-role {
+                font-size: 1.8rem;
+            }
+            
+            .company-letter {
+                font-size: 5rem;
+            }
         }
         
         .reveal-text { opacity: 0; }
@@ -583,57 +612,65 @@
         <section class="container history-section" id="history">
             <div class="section-title reveal-section">
                 <span class="section-num">02</span>
-                <h2>HISTORY</h2>
+                <h2>JOURNEY LOG</h2>
             </div>
             
-            <div class="history-grid">
-                <div class="timeline">
-                    <a href="https://Digirank360.com" target="_blank">
-                    <div class="timeline-item" data-index="1">
-                        <div class="timeline-dot"></div>
-                        <div class="t-year">2022 – 2023</div>
-                        <div class="t-role">PHP Wordpress Developer</div>
-                        <span class="t-company">Digirank360</span>
-                        <p class="t-desc">Started the journey building custom WordPress themes and plugins. Learned the fundamentals of client management.</p>
+            <div class="journey-cards-grid">
+                <!-- Card 1 -->
+                <a href="https://Digirank360.com" target="_blank">
+                    <div class="journey-card interactable">
+                        <div class="card-glow"></div>
+                        <div class="company-letter">D</div>
+                        <div class="card-content">
+                            <span class="t-year">2022 – 2023</span>
+                            <h3 class="t-role">Wordpress Dev</h3>
+                            <span class="t-company">@Digirank360</span>
+                            <p class="t-desc">Crafted custom themes and plugins. Mastered the art of turning coffee into client solutions.</p>
+                        </div>
                     </div>
-                    </a>
-                   <a href="https://theiade.in/" target="_blank">
-                    <div class="timeline-item" data-index="1">
-                        <div class="timeline-dot"></div>
-                        <div class="t-year">2022 – 2023</div>
-                        <div class="t-role">PHP Trainer</div>
-                        <span class="t-company">IADE</span>
-                        <p class="t-desc">Started the journey as a trainer in IADE institute and teach 50+ students about core PHP & Wordpress plugins working and build them custom themes.</p>
-                    </div>
-                    <a href="https://thatha.org/" target="_blank">
-                    <div class="timeline-item" data-index="2">
-                        <div class="timeline-dot"></div>
-                        <div class="t-year">2023 – 2024</div>
-                        <div class="t-role">Senior PHP Developer</div>
-                        <span class="t-company">THAtha Business Development LLP</span>
-                        <p class="t-desc">Deep dived into high-performance APIs, Database optimization, and complex logic using PHP, MySQL, and Redis.</p>
-                    </div>
-                    </a>
-                    <a href="https://dealmirror.com" target="_blank">
-                    <div class="timeline-item" data-index="3">
-                        <div class="timeline-dot"></div>
-                        <div class="t-year">2025 – Present</div>
-                        <div class="t-role">Senior Full Stack</div>
-                        <span class="t-company">Dealmirror</span>
-                        <p class="t-desc">Leading a team of 5 devs. Architecting scalable SaaS platforms using Laravel 10 and Next.js. Focusing on system design.</p>
-                    </div>
-                    </a>
-                </div>
+                </a>
 
-                <div class="history-visual">
-                    <div class="visual-container">
-                        <div class="v-core"></div>
-                        <div class="v-ring v-ring-1"></div>
-                        <div class="v-ring v-ring-2"></div>
-                        <div class="v-ring v-ring-3"></div>
+                <!-- Card 2 -->
+                <a href="https://theiade.in/" target="_blank">
+                    <div class="journey-card interactable">
+                        <div class="card-glow"></div>
+                        <div class="company-letter">I</div>
+                        <div class="card-content">
+                            <span class="t-year">2022 – 2023</span>
+                            <h3 class="t-role">PHP Trainer</h3>
+                            <span class="t-company">@IADE</span>
+                            <p class="t-desc">Mentored 50+ students in Core PHP. Built a curriculum that bridged theory and production.</p>
+                        </div>
                     </div>
-                    <div class="v-year-display">0000</div>
-                </div>
+                </a>
+
+                <!-- Card 3 -->
+                <a href="https://thatha.org/" target="_blank">
+                    <div class="journey-card interactable">
+                        <div class="card-glow"></div>
+                        <div class="company-letter">T</div>
+                        <div class="card-content">
+                            <span class="t-year">2023 – 2024</span>
+                            <h3 class="t-role">Senior PHP Dev</h3>
+                            <span class="t-company">@THAtha</span>
+                            <p class="t-desc">Architected high-performance APIs and optimized databases using MySQL and Redis.</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 4 -->
+                <a href="https://dealmirror.com" target="_blank">
+                    <div class="journey-card interactable">
+                        <div class="card-glow"></div>
+                        <div class="company-letter">D</div>
+                        <div class="card-content">
+                            <span class="t-year">2025 – PRESENT</span>
+                            <h3 class="t-role">Lead Full Stack</h3>
+                            <span class="t-company">@Dealmirror</span>
+                            <p class="t-desc">Leading 5 devs. Scaling SaaS platforms with Laravel 10 & Next.js. Building the future.</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -741,7 +778,6 @@
             <div class="socials reveal-section">
                 <a href="https://in.linkedin.com/in/manas-sharma-3202131b7" class="interactable">LinkedIn</a>
                 <a href="https://github.com/ManasFR" class="interactable">GitHub</a>
-                <!-- <a href="#" class="interactable">I</a> -->
             </div>
             <div class="copy">
                 &copy; 2024 MANAS. Developed with ❤️
@@ -878,112 +914,6 @@
         }, { threshold: 0.2 });
         const skillsGrid = document.querySelector('.skills-grid');
         if(skillsGrid) skillsObserver.observe(skillsGrid);
-
-        // =========================================
-        // 6. HISTORY VISUALIZATION LOGIC (NEW)
-        // =========================================
-        const historyItems = document.querySelectorAll('.timeline-item');
-        const vCore = document.querySelector('.v-core');
-        const vRings = document.querySelectorAll('.v-ring');
-        const vYear = document.querySelector('.v-year-display');
-
-        // Animation states definition
-        const states = {
-            1: { // Freelance
-                scale: 1,
-                rotate: 0,
-                borderRadius: '50%',
-                bg: '#ffffff',
-                ringOpacity: [1, 0, 0],
-                year: '2019'
-            },
-            2: { // Backend
-                scale: 1.5,
-                rotate: 45,
-                borderRadius: '10%',
-                bg: '#777777',
-                ringOpacity: [1, 1, 0],
-                year: '2021'
-            },
-            3: { // Senior
-                scale: 2,
-                rotate: 90,
-                borderRadius: '50%',
-                bg: '#D4FF00', // Acid Green
-                ringOpacity: [1, 1, 1],
-                year: '2023'
-            }
-        };
-
-        const historyObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    // Highlight Active Item on Left
-                    historyItems.forEach(i => i.classList.remove('active'));
-                    entry.target.classList.add('active');
-
-                    // Animate Right Visual
-                    const index = entry.target.getAttribute('data-index');
-                    const state = states[index];
-
-                    if(state) {
-                        // Animate Core Shape
-                        anime({
-                            targets: vCore,
-                            scale: state.scale,
-                            rotate: state.rotate,
-                            borderRadius: state.borderRadius,
-                            backgroundColor: state.index === 3 ? getComputedStyle(document.body).getPropertyValue('--accent') : state.bg,
-                            easing: 'spring(1, 80, 10, 0)',
-                            duration: 1000
-                        });
-
-                        // Animate Rings
-                        anime({
-                            targets: vRings,
-                            opacity: (el, i) => state.ringOpacity[i],
-                            scale: [0.8, 1],
-                            easing: 'easeOutExpo',
-                            duration: 800,
-                            delay: anime.stagger(100)
-                        });
-
-                        // Rotate Rings Continuously based on level
-                        anime.remove(vRings); // Stop previous loop
-                        if(index > 1) {
-                            anime({
-                                targets: '.v-ring-2',
-                                rotate: '1turn',
-                                duration: 10000,
-                                loop: true,
-                                easing: 'linear'
-                            });
-                        }
-                        if(index > 2) {
-                            anime({
-                                targets: '.v-ring-3',
-                                rotate: '-1turn',
-                                duration: 8000,
-                                loop: true,
-                                easing: 'linear'
-                            });
-                        }
-
-                        // Animate Year Text
-                        anime({
-                            targets: vYear,
-                            innerHTML: [0, state.year],
-                            round: 1,
-                            easing: 'easeInOutExpo',
-                            duration: 1500
-                        });
-                    }
-                }
-            });
-        }, { threshold: 0.5, rootMargin: "-10% 0px -10% 0px" });
-
-        historyItems.forEach(item => historyObserver.observe(item));
-
     </script>
 </body>
 </html>

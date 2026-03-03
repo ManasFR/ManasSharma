@@ -14,36 +14,30 @@
            1. CORE VARIABLES & RESET
            ========================================= */
         :root {
-            /* DARK MODE (DEFAULT) */
             --bg-color: #0b0b0b;
             --card-bg: #111111;
             --text-main: #f4f4f4;
             --text-muted: #777777;
-            --accent: #D4FF00; /* Acid Green */
+            --accent: #D4FF00;
             --border: rgba(255,255,255,0.08);
-            
-            /* REAL BULB VARS */
             --bulb-glass-off: rgba(255, 255, 255, 0.05);
             --bulb-glass-on: rgba(255, 235, 59, 0.1);
             --filament-off: #444;
             --filament-on: #ffaa00;
             --bulb-glow: rgba(255, 200, 0, 0.6);
             --socket: #1a1a1a;
-            
             --font-display: 'Clash Display', sans-serif;
             --font-body: 'Satoshi', sans-serif;
         }
 
-        /* LIGHT MODE VARIABLES */
         body.light-mode {
             --bg-color: #f0f0f0;
             --card-bg: #ffffff;
             --text-main: #1a1a1a;
             --text-muted: #555555;
-            --accent: #ff6b00; /* Vibrant Orange */
+            --accent: #ff6b00;
             --border: rgba(0,0,0,0.1);
             --socket: #333;
-            /* In light mode, bulb is "off" or dimmer usually, but we keep it interactive */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -53,16 +47,13 @@
             color: var(--text-main);
             font-family: var(--font-body);
             overflow-x: hidden;
-            /* cursor: none;  <-- REMOVED to make standard browsing easier, keeping custom dot only */
             transition: background-color 0.5s ease, color 0.5s ease;
+            scroll-behavior: smooth;
         }
 
         a { text-decoration: none; color: inherit; cursor: pointer; }
         ul { list-style: none; }
 
-        /* =========================================
-           SCROLLBAR STYLING (So it shows)
-           ========================================= */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -78,16 +69,12 @@
             background: var(--accent);
         }
 
-        /* Noise Texture */
         .noise {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 9000; opacity: 0.04;
             background: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
-        /* =========================================
-           2. WATERMARK (BACKGROUND NAME)
-           ========================================= */
         .watermark-bg {
             position: fixed;
             top: 50%;
@@ -95,7 +82,7 @@
             transform: translate(-50%, -50%);
             font-family: var(--font-display);
             font-weight: 700;
-            font-size: 25vw; /* Massive */
+            font-size: 25vw;
             color: transparent;
             -webkit-text-stroke: 2px rgba(255, 255, 255, 0.03);
             z-index: 0;
@@ -108,10 +95,10 @@
         }
 
         /* =========================================
-           3. REALISTIC BULB (UPDATED)
+           BULB
            ========================================= */
         .lamp-assembly {
-            position: fixed; top: -10px; right: 10%; z-index: 9998;
+            position: fixed; top: 20px; right: 2%; z-index: 9998;
             transform-origin: top center;
             animation: swing 4s infinite ease-in-out alternate;
             cursor: pointer;
@@ -141,7 +128,6 @@
             box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
         }
 
-        /* The Filament */
         .filament {
             position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
             width: 16px; height: 25px;
@@ -156,14 +142,12 @@
             border-radius: 50%; transition: 0.3s;
         }
 
-        /* Reflection on glass */
         .reflection {
             position: absolute; top: 10px; right: 15px;
             width: 10px; height: 10px; background: rgba(255,255,255,0.1);
             border-radius: 50%;
         }
 
-        /* LIGHT ON STATE (Active in Dark Mode usually, but here we toggle) */
         body:not(.light-mode) .filament { border-color: rgba(255,255,255,0.5); }
         body:not(.light-mode) .filament::after {
             border-color: var(--filament-on);
@@ -171,8 +155,7 @@
         }
         body:not(.light-mode) .bulb-glass {
             background: var(--bulb-glass-on);
-            box-shadow: 
-                inset 0 0 20px rgba(255, 235, 59, 0.2),
+            box-shadow: inset 0 0 20px rgba(255, 235, 59, 0.2),
                 0 0 60px var(--bulb-glow),
                 0 0 120px var(--bulb-glow);
             border-color: rgba(255, 255, 255, 0.4);
@@ -180,9 +163,8 @@
 
         @keyframes swing { 0% { transform: rotate(4deg); } 100% { transform: rotate(-4deg); } }
 
-
         /* =========================================
-           4. CUSTOM CURSOR
+           CUSTOM CURSOR
            ========================================= */
         .cursor-dot {
             position: fixed; top: 0; left: 0; width: 8px; height: 8px; 
@@ -202,17 +184,167 @@
         }
 
         /* =========================================
-           5. LAYOUT & SECTIONS
+           NAVBAR - STICKY & ANIMATED
            ========================================= */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 2; }
-
         nav {
             position: fixed; top: 0; left: 0; width: 100%;
-            padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; mix-blend-mode: difference; color: #fff;
+            padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center;
+            z-index: 10001; background: rgba(11, 11, 11, 0.7); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 255, 0, 0.1);
+            transition: all 0.3s ease;
         }
-        .logo { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; }
-        .menu-btn { font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        nav.nav-scrolled {
+            padding: 1rem 5%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo { 
+            font-family: var(--font-display); 
+            font-weight: 700; 
+            font-size: 1.5rem; 
+            color: var(--accent);
+            z-index: 1002;
+        }
+
+        .nav-menu {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            z-index: 999;
+            padding-top: 100px;
+        }
+
+        @media (min-width: 769px) {
+    .nav-menu {
+        display: flex;
+        position: static;
+        height: auto;
+        width: auto;
+        flex-direction: row;
+        background: transparent;
+        gap: 2rem;
+        padding-top: 0;
+    }
+
+    .nav-overlay {
+        display: none !important;
+    }
+}
+
+@media (max-width:480px) {
+    .nav-menu{
+        background: black;
+    }
+}
+
+        nav.active .nav-menu {
+            display: flex;
+        }
+
+        .nav-menu a {
+            font-size: 18px;
+            font-family: var(--font-display);
+            color: var(--text-main);
+            transition: color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent);
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1002;
+            background: none;
+            border: none;
+        }
+
+        .nav-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-main);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        nav.active .nav-toggle span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        nav.active .nav-toggle span:nth-child(2) {
+            opacity: 0;
+        }
+
+        nav.active .nav-toggle span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        nav.active .nav-overlay {
+            display: block;
+        }
+
+        /* =========================================
+           RESPONSIVE NAVBAR
+           ========================================= */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: flex;
+            }
+
+            nav {
+                padding: 1rem 4%;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* =========================================
+           LAYOUT & SECTIONS
+           ========================================= */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 2; }
 
         .hero {
             height: 100vh; display: flex; flex-direction: column; justify-content: center;
@@ -270,9 +402,6 @@
         .stat-num { font-family: var(--font-display); font-size: 4rem; color: var(--accent); line-height: 1; }
         .stat-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* =========================================
-           6. JOURNEY LOG
-           ========================================= */
         .history-section { padding-bottom: 8rem; }
         .journey-cards-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
@@ -320,7 +449,7 @@
         .t-desc { font-size: 1rem; line-height: 1.6; color: var(--text-muted); }
 
         /* =========================================
-           7. SKILLS
+           TECH BUCKET (SKILLS)
            ========================================= */
         .skills-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -362,7 +491,82 @@
         }
 
         /* =========================================
-           8. PROJECTS
+           TOOLS SECTION
+           ========================================= */
+        .tools-section { padding-bottom: 8rem; }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .tool-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .tool-card::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 255, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+            pointer-events: none;
+        }
+        
+        .tool-card:hover::after {
+            left: 100%;
+        }
+        
+        .tool-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 20px rgba(212, 255, 0, 0.05);
+            transform: translateY(-8px) scale(1.05);
+        }
+        
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            transition: all 0.4s ease;
+            filter: drop-shadow(0 0 5px rgba(212, 255, 0, 0.3));
+            color: var(--text-main);
+        }
+        
+        .tool-card:hover .tool-icon {
+            color: var(--accent);
+            filter: drop-shadow(0 0 15px rgba(212, 255, 0, 0.6));
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .tool-name {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-main);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* =========================================
+           PROJECTS
            ========================================= */
         #work { padding-bottom: 8rem; }
         .projects-grid {
@@ -395,7 +599,7 @@
         
         .pc-footer { margin-top: 2rem; display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
         .pc-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .pc-tag { font-size: 0.7rem; border: 1px solid var(--border); padding: 4px 10px; border-radius: 50px; color: var(--text-muted); background: rgba(255,255,255,0.03); }
+        .pc-tag { font-size: 0.7rem; border: 1px solid var(--border); padding: 4px 10px; border-radius: 50px; color: #D5FF03; background: rgba(212, 212, 212, 0); }
         .pc-arrow {
             width: 40px; height: 40px; border-radius: 50%; background: var(--border);
             display: flex; align-items: center; justify-content: center;
@@ -404,13 +608,21 @@
         .project-card:hover .pc-arrow { background: var(--accent); color: #000; transform: rotate(-45deg); }
 
         /* =========================================
-           9. FOOTER
+           FOOTER - FIXED
            ========================================= */
-        .footer { padding: 8rem 5% 4rem; text-align: center; background: #050505; position: relative; z-index: 2;}
+        .footer { 
+            padding: 8rem 5% 4rem; 
+            text-align: center; 
+            background: #050505; 
+            position: relative; 
+            z-index: 2;
+            width: 100%;
+            box-sizing: border-box;
+        }
         body.light-mode .footer { background: #dedede; }
         .cta-text { font-family: var(--font-display); font-size: 8vw; line-height: 1; margin-bottom: 2rem; color: var(--text-main); display: inline-block; }
         .cta-sub { color: var(--accent); font-size: 1.2rem; margin-bottom: 1rem; letter-spacing: 2px;}
-        .socials { display: flex; justify-content: center; gap: 40px; margin-top: 4rem; font-size: 1.2rem; }
+        .socials { display: flex; justify-content: center; gap: 40px; margin-top: 4rem; font-size: 1.2rem; flex-wrap: wrap; }
         .socials a { position: relative; overflow: hidden; }
         .socials a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
         .socials a:hover::after { width: 100%; }
@@ -418,14 +630,42 @@
         .copy { margin-top: 4rem; color: var(--text-muted); font-size: 0.9rem; }
         .reveal-text { opacity: 0; }
 
-        @media (max-width: 1400px) { .projects-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 1024px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } .hero-title { font-size: 4rem; } }
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+        @media (max-width: 1400px) { 
+            .projects-grid { grid-template-columns: repeat(3, 1fr); } 
+        }
+
+        @media (max-width: 1024px) { 
+            .projects-grid { grid-template-columns: repeat(2, 1fr); } 
+            .hero-title { font-size: 4rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            .journey-cards-grid { grid-template-columns: 1fr; }
+            .tools-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        }
+
         @media (max-width: 768px) {
             .projects-grid { grid-template-columns: 1fr; }
             .hero-meta { flex-direction: column; align-items: flex-start; gap: 2rem; }
             .about-grid { grid-template-columns: 1fr; }
             .journey-cards-grid { grid-template-columns: 1fr; }
             .lamp-assembly { right: 20px; transform: scale(0.8); }
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+            .marquee span { font-size: 1.5rem; }
+            .hero-title { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 4%; }
+            .projects-grid { gap: 15px; }
+            .project-card { min-height: 350px; padding: 1.5rem; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .marquee { margin: 2rem 0; }
+            .footer { padding: 4rem 4% 2rem; }
+            .cta-text { font-size: 5vw; }
         }
     </style>
 </head>
@@ -452,13 +692,30 @@
         </div>
     </div>
 
-    <nav>
+    <!-- STICKY ANIMATED NAVBAR -->
+    <nav id="navbar">
         <div class="logo interactable">MANAS</div>
-        <!-- <div class="menu-btn interactable">Menu</div> -->
+        
+        <div class="nav-menu">
+            <a href="#hero" class="nav-link">Launchpad</a>
+            <a href="#about" class="nav-link">Who I Am</a>
+            <a href="#skills" class="nav-link">Arsenal</a>
+            <a href="#tools" class="nav-link">Tools</a>
+            <a href="#work" class="nav-link">Projects</a>
+            <a href="#contact" class="nav-link">Contact Us</a>
+        </div>
+
+        <button class="nav-toggle" id="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-overlay" id="nav-overlay"></div>
     </nav>
 
     <main>
-        <section class="hero container">
+        <section class="hero container" id="hero">
             <h1 class="hero-title">
                 <span class="line"><span class="word">ARCHITECTING</span></span>
                 <span class="line"><span class="word">THE DIGITAL</span></span>
@@ -570,23 +827,13 @@
         <section class="container" id="skills">
             <div class="section-title reveal-section">
                 <span class="section-num">03</span>
-                <h2>ARSENAL</h2>
+                <h2>TECH BUCKET</h2>
             </div>
             <div class="skills-grid">
-                <div class="skill-card interactable">
-                    <div class="skill-name">PHP</div>
-                    <div class="skill-level">3 Years • Expert</div>
-                    <div class="skill-icon">P</div>
-                </div>
                 <div class="skill-card interactable">
                     <div class="skill-name">Laravel</div>
                     <div class="skill-level">^V10 • Architecture</div>
                     <div class="skill-icon">L</div>
-                </div>
-                <div class="skill-card interactable">
-                    <div class="skill-name">React</div>
-                    <div class="skill-level">Advanced • Hooks</div>
-                    <div class="skill-icon">R</div>
                 </div>
                 <div class="skill-card interactable">
                     <div class="skill-name">Next.js</div>
@@ -594,14 +841,58 @@
                     <div class="skill-icon">N</div>
                 </div>
                 <div class="skill-card interactable">
+                    <div class="skill-name">CodeIgniter</div>
+                    <div class="skill-level">^V14 • MVC Architecture</div>
+                    <div class="skill-icon">C</div>
+                </div>
+                <div class="skill-card interactable">
+                    <div class="skill-name">PHP</div>
+                    <div class="skill-level">3 Years • Expert</div>
+                    <div class="skill-icon">P</div>
+                </div>
+                <div class="skill-card interactable">
                     <div class="skill-name">SQL</div>
                     <div class="skill-level">MySQL • PostgreSQL</div>
                     <div class="skill-icon">S</div>
                 </div>
                 <div class="skill-card interactable">
-                    <div class="skill-name">Creative Dev</div>
-                    <div class="skill-level">Anime.js • GSAP</div>
-                    <div class="skill-icon">C</div>
+                    <div class="skill-name">Wordpress</div>
+                    <div class="skill-level">Woocommerce • SMTP</div>
+                    <div class="skill-icon">W</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOOLS SECTION -->
+        <section class="container tools-section" id="tools">
+            <div class="section-title reveal-section">
+                <span class="section-num">03.5</span>
+                <h2>TECH TOOLS</h2>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card interactable">
+                    <div class="tool-icon"><i class="ri-github-fill"></i></div>
+                    <div class="tool-name">Github</div>
+                </div>
+                <div class="tool-card interactable">
+                    <div class="tool-icon"><i class="ri-global-line"></i></div>
+                    <div class="tool-name">Vercel</div>
+                </div>
+                <div class="tool-card interactable">
+                    <div class="tool-icon"><i class="ri-cloud-line"></i></div>
+                    <div class="tool-name">AWS EC2</div>
+                </div>
+                <div class="tool-card interactable">
+                    <div class="tool-icon"><i class="ri-folder-3-line"></i></div>
+                    <div class="tool-name">Composer</div>
+                </div>
+                <div class="tool-card interactable">
+                    <div class="tool-icon"><i class="ri-npm-fill"></i></div>
+                    <div class="tool-name">NPM</div>
+                </div>
+                <div class="tool-card interactable">
+                    <div class="tool-icon"><i class="ri-mail-check-line"></i></div>
+                    <div class="tool-name">Postman</div>
                 </div>
             </div>
         </section>
@@ -673,7 +964,7 @@
                         <p class="pc-desc">Smart coupon automation WordPress plugin with licensing system designed to boost conversion rates through intelligent discount management.</p>
                     </div>
                     <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">WordPress</span><span class="pc-tag">PHP</span><span class="pc-tag">License</span></div>
+                        <div class="pc-tags"><span class="pc-tag">WordPress</span><span class="pc-tag">PHP</span></div>
                         <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
                     </div>
                 </a>
@@ -686,7 +977,7 @@
                         <p class="pc-desc">Real estate platform which help to collect leads from the website and analyze the full analytics of your customers need. </p>
                     </div>
                     <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Solidity</span><span class="pc-tag">Laravel</span></div>
+                        <div class="pc-tags"><span class="pc-tag">Laravel</span><span class="pc-tag">React</span></div>
                         <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
                     </div>
                 </div>
@@ -719,7 +1010,118 @@
             </div>
         </section>
 
-        <footer class="footer">
+        <!-- BUILD PLUGINS SECTION -->
+        <section class="container" id="plugins">
+            <div class="section-title reveal-section">
+                <span class="section-num">05</span>
+                <h2>BUILD PLUGINS</h2>
+            </div>
+
+            <div class="projects-grid">
+                <a href="https://dealmirror.com" target="_blank" class="project-card interactable">
+                    <div class="pc-num">01</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">Home Controller</span>
+                        <h3 class="pc-title">Producty</h3>
+                        <p class="pc-desc">Build a plugin from scratch that fully controls the homepage deals and logic controller, including deal arrangement and ribbon timer. It should also provide functions to create custom WooCommerce-based filters and a custom shortcode generator.</p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">Wordpress</span><span class="pc-tag">Ajax</span></div>
+                    </div>
+                </a>
+
+                <a href="https://dealmirror.com/product/duprun" target="_blank" class="project-card interactable">
+                    <div class="pc-num">02</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">Pricing Plan</span>
+                        <h3 class="pc-title">WooPrice</h3>
+                        <p class="pc-desc">A custom-built plugin from scratch to create multiple plans and assign license codes for the same WooCommerce product without using ACF fields. </p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">Woocommerce</span><span class="pc-tag">License</span></div>
+                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
+                    </div>
+                </a>
+
+                <a href="https://dealmirror.com/product/aiwritio/" target="_blank" class="project-card interactable">
+                    <div class="pc-num">03</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">AI Writer</span>
+                        <h3 class="pc-title">AiWritio</h3>
+                        <p class="pc-desc">A plugin which help you to create a outstanding blogs base on your niche like newsletter, blogs and etc using AI.</p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">AI</span><span class="pc-tag">Blog</span></div>
+                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
+                    </div>
+                </a>
+
+                <a href="https://dealmirror.com/product/youtbeify/" target="_blank" class="project-card interactable">
+                    <div class="pc-num">04</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">Youtube AI</span>
+                        <h3 class="pc-title">Youtubeify</h3>
+                        <p class="pc-desc">Convert your youtube video to blogs in your wordpress site using AI.</p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">Wordpress</span><span class="pc-tag">AI</span></div>
+                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
+                    </div>
+                </a>
+
+                <a href="https://dealmirror.com/product/atcoupon-smart-coupons-automation-plugin-to-boost-conversion/" target="_blank" class="project-card interactable">
+                    <div class="pc-num">05</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">WordPress Plugin</span>
+                        <h3 class="pc-title">ATCoupon</h3>
+                        <p class="pc-desc">Smart coupon automation WordPress plugin with licensing system designed to boost conversion rates through intelligent discount management.</p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">WordPress</span><span class="pc-tag">PHP</span></div>
+                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
+                    </div>
+                </a>
+
+                <a href="https://dealmirror.com/product/appointiqo/" target="_blank" class="project-card interactable">
+                    <div class="pc-num">06</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">Appointment</span>
+                        <h3 class="pc-title">Appointiqo</h3>
+                        <p class="pc-desc">Simplify Your Scheduling with a Smart WordPress Booking Plugin and also integrated with stripe & razorpay.</p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">Wordpress</span><span class="pc-tag">Appointment</span></div>
+                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
+                    </div>
+                </a>
+
+                <div class="project-card interactable">
+                    <div class="pc-num">07</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">Order</span>
+                        <h3 class="pc-title">OrdlyPDF</h3>
+                        <p class="pc-desc">Convert WooCommerce order details into a professional receipt for easier disputes and refunds. </p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">Woocommerce</span><span class="pc-tag">PDF</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card interactable">
+                    <div class="pc-num">08</div>
+                    <div class="pc-head">
+                        <span class="pc-cat">Refund</span>
+                        <h3 class="pc-title">Refreq</h3>
+                        <p class="pc-desc">Create a custom-built plugin to manage refund requests directly within WooCommerce orders, including request submission, approval workflow, status tracking, and structured refund records inside the order details page.</p>
+                    </div>
+                    <div class="pc-footer">
+                        <div class="pc-tags"><span class="pc-tag">Refund</span><span class="pc-tag">Woocommerce</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer" id="contact">
             <div class="reveal-section">
                 <div class="cta-sub">GOT AN IDEA?</div>
                 <div class="cta-text">
@@ -739,9 +1141,7 @@
     </main>
 
     <script>
-        // =========================================
-        // 1. CURSOR LOGIC
-        // =========================================
+        /* ===== CURSOR ===== */
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
         
@@ -751,7 +1151,6 @@
             cursorDot.style.left = `${posX}px`;
             cursorDot.style.top = `${posY}px`;
             
-            // Lag for outline
             cursorOutline.animate({
                 left: `${posX}px`,
                 top: `${posY}px`
@@ -763,16 +1162,53 @@
             el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
         });
 
-        // =========================================
-        // 2. THEME TOGGLE (REAL BULB)
-        // =========================================
+        /* ===== STICKY ANIMATED NAVBAR ===== */
+        const navbar = document.getElementById('navbar');
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const navOverlay = document.getElementById('nav-overlay');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+
+        navToggle.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                // Close menu
+                navbar.classList.remove('active');
+                
+                // Smooth scroll to section
+                if (targetSection) {
+                    const offsetTop = targetSection.offsetTop - 100;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        navOverlay.addEventListener('click', () => {
+            navbar.classList.remove('active');
+        });
+
+        /* ===== THEME TOGGLE ===== */
         const themeToggle = document.getElementById('theme-toggle');
-        const bulbGlass = document.querySelector('.bulb-glass');
         
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('light-mode');
-            
-            // Pop effect
             anime({
                 targets: '.bulb-glass',
                 scale: [1, 1.15, 1],
@@ -781,41 +1217,63 @@
             });
         });
 
-        // =========================================
-        // 3. PROJECT GRID ANIMATION
-        // =========================================
-        const projectGrid = document.querySelector('.projects-grid');
-        const projectObserver = new IntersectionObserver((entries) => {
+        /* ===== PROJECT GRID ANIMATION ===== */
+        const projectGrids = document.querySelectorAll('.projects-grid');
+        projectGrids.forEach((grid) => {
+            const projectObserver = new IntersectionObserver((entries) => {
+                if(entries[0].isIntersecting) {
+                    anime({
+                        targets: grid.querySelectorAll('.project-card'),
+                        opacity: [0, 1],
+                        translateY: [50, 0],
+                        delay: anime.stagger(100),
+                        duration: 800,
+                        easing: 'spring(1, 80, 10, 0)'
+                    });
+                    projectObserver.disconnect();
+                }
+            }, { threshold: 0.1 });
+            projectObserver.observe(grid);
+        });
+
+        /* ===== TOOLS GRID ANIMATION ===== */
+        const toolsGrid = document.querySelector('.tools-grid');
+        const toolsObserver = new IntersectionObserver((entries) => {
             if(entries[0].isIntersecting) {
                 anime({
-                    targets: '.project-card',
+                    targets: '.tool-card',
                     opacity: [0, 1],
-                    translateY: [50, 0],
-                    delay: anime.stagger(100),
-                    duration: 800,
-                    easing: 'spring(1, 80, 10, 0)'
+                    translateY: [30, 0],
+                    delay: anime.stagger(80, {grid: [3, 2], from: 'center'}),
+                    duration: 700,
+                    easing: 'easeOutQuart'
                 });
-                projectObserver.disconnect();
+                toolsObserver.disconnect();
             }
-        }, { threshold: 0.1 });
+        }, { threshold: 0.2 });
 
-        if(projectGrid) {
-            projectObserver.observe(projectGrid);
+        if(toolsGrid) {
+            toolsObserver.observe(toolsGrid);
         }
 
-        // =========================================
-        // 4. PRELOADER & HERO ENTRANCE
-        // =========================================
+        /* ===== PRELOADER & HERO ===== */
         const preloaderTimeline = anime.timeline({ easing: 'easeInOutQuad' });
         preloaderTimeline
         .add({ targets: '.loader-bar', width: '100%', duration: 1200 })
-        .add({ targets: '.preloader', translateY: '-100%', duration: 800, delay: 100, easing: 'easeInExpo' })
+        .add({
+            targets: '.preloader',
+            translateY: '-100%',
+            duration: 800,
+            delay: 100,
+            easing: 'easeInExpo',
+            complete: function() {
+                document.querySelector('.preloader').style.display = 'none';
+            }
+        })
         .add({ targets: '.hero-title .word', translateY: [100, 0], opacity: [0, 1], easing: 'easeOutExpo', duration: 1400, delay: (el, i) => 30 * i, offset: '-=400' })
         .add({ targets: '.hero-meta', opacity: [0, 1], translateY: [20, 0], duration: 1000, offset: '-=1000' });
 
-        // =========================================
-        // 5. SCROLL REVEAL (GENERAL)
-        // =========================================
+        /* ===== SCROLL REVEAL ===== */
         const revealElements = document.querySelectorAll('.reveal-section');
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -834,7 +1292,7 @@
 
         revealElements.forEach(el => { el.style.opacity = 0; sectionObserver.observe(el); });
 
-        // Skills Stagger
+        /* ===== SKILLS ANIMATION ===== */
         const skillsObserver = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 anime({

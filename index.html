@@ -1,1313 +1,949 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MANAS | Architecting Digital Future</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manas Sharma | Full Stack Developer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+
+<style>
+/* --- DESIGN TOKENS --- */
+:root {
+    --bg-main: #fcfcfd;
+    --bg-secondary: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #94a3b8;
     
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&f[]=clash-display@600,700,500&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-
-    <style>
-        /* =========================================
-           1. CORE VARIABLES & RESET
-           ========================================= */
-        :root {
-            --bg-color: #0b0b0b;
-            --card-bg: #111111;
-            --text-main: #f4f4f4;
-            --text-muted: #777777;
-            --accent: #D4FF00;
-            --border: rgba(255,255,255,0.08);
-            --bulb-glass-off: rgba(255, 255, 255, 0.05);
-            --bulb-glass-on: rgba(255, 235, 59, 0.1);
-            --filament-off: #444;
-            --filament-on: #ffaa00;
-            --bulb-glow: rgba(255, 200, 0, 0.6);
-            --socket: #1a1a1a;
-            --font-display: 'Clash Display', sans-serif;
-            --font-body: 'Satoshi', sans-serif;
-        }
-
-        body.light-mode {
-            --bg-color: #f0f0f0;
-            --card-bg: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #555555;
-            --accent: #ff6b00;
-            --border: rgba(0,0,0,0.1);
-            --socket: #333;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            overflow-x: hidden;
-            transition: background-color 0.5s ease, color 0.5s ease;
-            scroll-behavior: smooth;
-        }
-
-        a { text-decoration: none; color: inherit; cursor: pointer; }
-        ul { list-style: none; }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color); 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333; 
-            border-radius: 5px;
-            border: 2px solid var(--bg-color);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-        }
-
-        .noise {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9000; opacity: 0.04;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-        }
-
-        .watermark-bg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 25vw;
-            color: transparent;
-            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.03);
-            z-index: 0;
-            pointer-events: none;
-            white-space: nowrap;
-            user-select: none;
-        }
-        body.light-mode .watermark-bg {
-            -webkit-text-stroke: 2px rgba(0, 0, 0, 0.03);
-        }
-
-        /* =========================================
-           BULB
-           ========================================= */
-        .lamp-assembly {
-            position: fixed; top: 20px; right: 2%; z-index: 9998;
-            transform-origin: top center;
-            animation: swing 4s infinite ease-in-out alternate;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .cord {
-            width: 2px; height: 100px; background: #333;
-        }
-
-        .socket-neck {
-            width: 20px; height: 20px; background: var(--socket);
-            border-radius: 2px;
-        }
-
-        .bulb-glass {
-            width: 70px; height: 70px;
-            background: var(--bulb-glass-off);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
-            margin-top: -2px;
-            position: relative;
-            backdrop-filter: blur(1px);
-            transition: 0.3s;
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
-        }
-
-        .filament {
-            position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
-            width: 16px; height: 25px;
-            border: 1px solid var(--filament-off);
-            border-bottom: none;
-            border-radius: 15px 15px 0 0;
-            transition: 0.3s;
-        }
-        .filament::after {
-            content: ''; position: absolute; bottom: 0; left: -4px; right: -4px;
-            height: 4px; border-bottom: 2px solid var(--filament-off);
-            border-radius: 50%; transition: 0.3s;
-        }
-
-        .reflection {
-            position: absolute; top: 10px; right: 15px;
-            width: 10px; height: 10px; background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-
-        body:not(.light-mode) .filament { border-color: rgba(255,255,255,0.5); }
-        body:not(.light-mode) .filament::after {
-            border-color: var(--filament-on);
-            box-shadow: 0 0 10px var(--filament-on), 0 0 20px var(--filament-on);
-        }
-        body:not(.light-mode) .bulb-glass {
-            background: var(--bulb-glass-on);
-            box-shadow: inset 0 0 20px rgba(255, 235, 59, 0.2),
-                0 0 60px var(--bulb-glow),
-                0 0 120px var(--bulb-glow);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        @keyframes swing { 0% { transform: rotate(4deg); } 100% { transform: rotate(-4deg); } }
-
-        /* =========================================
-           CUSTOM CURSOR
-           ========================================= */
-        .cursor-dot {
-            position: fixed; top: 0; left: 0; width: 8px; height: 8px; 
-            background-color: var(--accent); border-radius: 50%;
-            z-index: 9999; pointer-events: none; transform: translate(-50%, -50%);
-        }
-        .cursor-outline {
-            position: fixed; top: 0; left: 0; width: 40px; height: 40px;
-            border: 1px solid rgba(125, 125, 125, 0.5); border-radius: 50%;
-            z-index: 9999; pointer-events: none; transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
-        body.hovering .cursor-outline {
-            width: 60px; height: 60px;
-            background-color: rgba(255,255,255,0.1);
-            border-color: transparent; backdrop-filter: blur(2px);
-        }
-
-        /* =========================================
-           NAVBAR - STICKY & ANIMATED
-           ========================================= */
-        nav {
-            position: fixed; top: 0; left: 0; width: 100%;
-            padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center;
-            z-index: 10001; background: rgba(11, 11, 11, 0.7); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 255, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        nav.nav-scrolled {
-            padding: 1rem 5%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .logo { 
-            font-family: var(--font-display); 
-            font-weight: 700; 
-            font-size: 1.5rem; 
-            color: var(--accent);
-            z-index: 1002;
-        }
-
-        .nav-menu {
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100vh;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3rem;
-            z-index: 999;
-            padding-top: 100px;
-        }
-
-        @media (min-width: 769px) {
-    .nav-menu {
-        display: flex;
-        position: static;
-        height: auto;
-        width: auto;
-        flex-direction: row;
-        background: transparent;
-        gap: 2rem;
-        padding-top: 0;
-    }
-
-    .nav-overlay {
-        display: none !important;
-    }
+    /* Gradients & Accents */
+    --accent-blue: #3b82f6;
+    --accent-indigo: #6366f1;
+    --accent-purple: #8b5cf6;
+    --gradient-primary: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+    --gradient-text: linear-gradient(to right, #2563eb, #7c3aed);
+    
+    /* UI Elements */
+    --border-color: rgba(15, 23, 42, 0.08);
+    --card-shadow: 0 4px 24px -8px rgba(15, 23, 42, 0.05);
+    --hover-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.2);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    
+    /* Transitions */
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@media (max-width:480px) {
-    .nav-menu{
-        background: black;
-    }
+/* --- BASE STYLES --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
-        nav.active .nav-menu {
-            display: flex;
-        }
+/* Background Glowing Orbs */
+.bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: -1;
+    opacity: 0.5;
+    animation: floatOrb 12s infinite ease-in-out alternate;
+}
+.orb-1 { width: 50vw; height: 50vw; max-width: 600px; max-height: 600px; background: rgba(59, 130, 246, 0.2); top: -10%; left: -10%; }
+.orb-2 { width: 40vw; height: 40vw; max-width: 500px; max-height: 500px; background: rgba(139, 92, 246, 0.2); top: 40%; right: -5%; animation-delay: -5s; }
+.orb-3 { width: 60vw; height: 60vw; max-width: 700px; max-height: 700px; background: rgba(99, 102, 241, 0.15); bottom: -10%; left: 10%; animation-delay: -2s; }
 
-        .nav-menu a {
-            font-size: 18px;
-            font-family: var(--font-display);
-            color: var(--text-main);
-            transition: color 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            padding-bottom: 5px;
-        }
+a { text-decoration: none; color: inherit; }
+h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; line-height: 1.2; }
+.text-gradient {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
 
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
+/* --- TYPOGRAPHY & UTILITIES --- */
+.section-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 8rem 2rem;
+}
+.section-header { margin-bottom: 4rem; text-align: center; }
+.section-subtitle {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    color: var(--accent-indigo);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(99, 102, 241, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+.section-title { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800; }
 
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
+/* --- NAVIGATION --- */
+nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    padding: 1.2rem 0;
+    transition: var(--transition-smooth);
+}
+nav.scrolled {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+.nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    z-index: 1001;
+    position: relative;
+}
+.logo span { color: var(--accent-indigo); }
 
-        .nav-menu a:hover {
-            color: var(--accent);
-        }
+/* Desktop Links */
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-links a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+    position: relative;
+}
+.nav-links a:not(.btn-nav)::after {
+    content: ''; position: absolute; width: 0; height: 2px;
+    bottom: -4px; left: 0; background: var(--gradient-primary);
+    transition: var(--transition-smooth); border-radius: 2px;
+}
+.nav-links a:not(.btn-nav):hover { color: var(--accent-indigo); }
+.nav-links a:not(.btn-nav):hover::after { width: 100%; }
 
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            z-index: 1002;
-            background: none;
-            border: none;
-        }
+.btn-nav {
+    background: var(--text-primary);
+    color: #fff !important;
+    padding: 0.7rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: var(--transition-bounce);
+}
+.btn-nav:hover {
+    background: var(--accent-indigo);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.6);
+}
 
-        .nav-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--text-main);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    z-index: 1001;
+    position: relative;
+}
 
-        nav.active .nav-toggle span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
+/* --- HERO SECTION --- */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 6rem;
+}
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    align-items: center;
+}
+.hero-content h1 {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 1.5rem;
+}
+.hero-content p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 540px;
+    margin-bottom: 2.5rem;
+}
 
-        nav.active .nav-toggle span:nth-child(2) {
-            opacity: 0;
-        }
+/* Animated Buttons */
+.hero-buttons { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 1rem 2.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: var(--transition-bounce);
+    box-shadow: 0 10px 20px -10px var(--accent-indigo);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+.btn-primary::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: var(--transition-smooth); z-index: -1;
+}
+.btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px -10px var(--accent-indigo); }
+.btn-primary:hover::before { left: 100%; transition: all 0.6s ease; }
+.btn-primary i { transition: transform 0.3s ease; }
+.btn-primary:hover i { transform: translateX(5px); }
 
-        nav.active .nav-toggle span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
+.btn-outline {
+    background: transparent;
+    color: var(--text-primary);
+    padding: 1rem 2.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    border: 2px solid var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: var(--transition-bounce);
+}
+.btn-outline:hover {
+    border-color: var(--text-primary);
+    background: var(--text-primary);
+    color: white;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px -10px rgba(0,0,0,0.3);
+}
 
-        .nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 998;
-        }
+/* Hero Image & Visuals */
+.hero-image-wrapper { position: relative; perspective: 1000px; }
+.hero-image {
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: var(--bg-secondary);
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* UPDATE BACKGROUND IMAGE HERE */
+    background-image: url('https://pps.whatsapp.net/v/t61.24694-24/661494207_4627034357615334_549846354033188818_n.jpg?ccb=11-4&oh=01_Q5Aa4AGXFVQNIrEBaTIS_zpozXBy4lLqDv8FaLWd4_NZDesb1Q&oe=69DDFE4B&_nc_sid=5e03e0&_nc_cat=110');
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+.hero-image-wrapper:hover .hero-image {
+    transform: rotateY(-5deg) rotateX(5deg) scale(1.02);
+    box-shadow: var(--hover-shadow);
+}
+.hero-image::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(15,23,42,0.9) 0%, transparent 60%);
+}
+.hero-image-content {
+    position: absolute; bottom: 2.5rem; left: 2.5rem; z-index: 2; color: white;
+}
+.hero-image-content h3 { font-size: 2.2rem; margin-bottom: 0.2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+.hero-image-content p { font-family: 'Fira Code', monospace; font-size: 0.95rem; color: #cbd5e1; }
 
-        nav.active .nav-overlay {
-            display: block;
-        }
+.floating-badge {
+    position: absolute;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    z-index: 3;
+    transition: var(--transition-bounce);
+    animation: float 6s infinite ease-in-out;
+}
+.floating-badge:hover { transform: scale(1.05) translateY(-5px) !important; cursor: default; }
+.badge-top { top: -2rem; right: -2rem; animation-delay: 1s; }
+.badge-bottom { bottom: -2rem; left: -2rem; animation-delay: 2s; }
+.status-dot { width: 12px; height: 12px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 4px rgba(16,185,129,0.2); animation: pulse 2s infinite; }
 
-        /* =========================================
-           RESPONSIVE NAVBAR
-           ========================================= */
-        @media (max-width: 768px) {
-            .nav-toggle {
-                display: flex;
-            }
+/* Stats Bar */
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border-color);
+}
+.stat h4 { font-size: 2.5rem; font-weight: 800; color: var(--text-primary); line-height: 1; margin-bottom: 0.5rem; }
+.stat h4 span { color: var(--accent-indigo); }
+.stat p { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
 
-            nav {
-                padding: 1rem 4%;
-            }
+/* --- ABOUT CODE BLOCK --- */
+.about-bento { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+.code-window {
+    background: #0f172a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: var(--transition-smooth);
+}
+.code-window:hover { transform: translateY(-5px); box-shadow: 0 30px 60px -12px rgba(99, 102, 241, 0.3); border-color: rgba(99, 102, 241, 0.3); }
+.code-header { background: #1e293b; padding: 1rem 1.5rem; display: flex; gap: 0.5rem; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.mac-dot { width: 12px; height: 12px; border-radius: 50%; }
+.mac-dot.red { background: #ef4444; }
+.mac-dot.yellow { background: #eab308; }
+.mac-dot.green { background: #22c55e; }
+.code-body { padding: 2.5rem; font-family: 'Fira Code', monospace; font-size: 1rem; color: #e2e8f0; line-height: 1.8; overflow-x: auto; }
+.c-keyword { color: #c678dd; }
+.c-func { color: #61afef; }
+.c-string { color: #98c379; }
+.c-comment { color: #5c6370; font-style: italic; }
 
-            .logo {
-                font-size: 1.2rem;
-            }
-        }
+/* --- SKILLS GRID --- */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
+.skill-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: var(--transition-bounce);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+.skill-card::after {
+    content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(99,102,241,0.05) 0%, transparent 70%);
+    opacity: 0; transition: var(--transition-smooth); z-index: -1;
+}
+.skill-card:hover { transform: translateY(-8px); box-shadow: var(--hover-shadow); border-color: var(--accent-indigo); }
+.skill-card:hover::after { opacity: 1; }
+.skill-card i { font-size: 3.5rem; transition: var(--transition-bounce); }
+.skill-card:hover i { transform: scale(1.1); }
+.skill-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; }
+.skill-card p { font-size: 0.8rem; color: var(--text-tertiary); font-family: 'Fira Code', monospace; }
 
-        /* =========================================
-           LAYOUT & SECTIONS
-           ========================================= */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 2; }
+/* --- EXPERIENCE TIMELINE --- */
+.timeline { max-width: 900px; margin: 0 auto; position: relative; }
+.timeline::before {
+    content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--accent-indigo) 0%, rgba(99,102,241,0.2) 100%);
+}
+.timeline-item { position: relative; padding-left: 5rem; margin-bottom: 4rem; }
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-dot {
+    position: absolute; left: 13px; top: 5px; width: 24px; height: 24px;
+    background: white; border: 4px solid var(--accent-indigo); border-radius: 50%;
+    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.1); transition: var(--transition-bounce);
+}
+.timeline-item:hover .timeline-dot { transform: scale(1.3); background: var(--accent-indigo); box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.2); }
+.timeline-date {
+    display: inline-block; font-family: 'Fira Code', monospace; font-size: 0.85rem;
+    color: var(--accent-indigo); background: rgba(99, 102, 241, 0.1); padding: 0.4rem 1.2rem;
+    border-radius: 100px; margin-bottom: 1.2rem; font-weight: 600;
+}
+.timeline-content {
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    padding: 2.5rem; border-radius: 20px; box-shadow: var(--card-shadow); transition: var(--transition-smooth);
+}
+.timeline-content:hover { box-shadow: var(--hover-shadow); transform: translateX(10px); border-color: rgba(99,102,241,0.3); }
+.timeline-content h3 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.timeline-company { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem; font-weight: 500; }
+.timeline-company a { color: var(--accent-indigo); text-decoration: none; position: relative; }
+.timeline-company a::after { content:''; position:absolute; width:100%; height:2px; bottom:-2px; left:0; background:var(--accent-indigo); transform:scaleX(0); transform-origin:right; transition:transform 0.3s ease; }
+.timeline-company a:hover::after { transform:scaleX(1); transform-origin:left; }
+.timeline-content p { color: var(--text-secondary); line-height: 1.8; }
 
-        .hero {
-            height: 100vh; display: flex; flex-direction: column; justify-content: center;
-            padding-top: 100px; position: relative;
-        }
-        .hero-title {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 9vw, 10rem);
-            line-height: 0.9; text-transform: uppercase; font-weight: 600;
-        }
-        .hero-title .line { overflow: hidden; display: block; }
-        .hero-title .word { display: inline-block; transform: translateY(100%); }
-        
-        .hero-meta {
-            margin-top: 3rem; display: flex; justify-content: space-between; align-items: flex-end;
-            font-size: 1.1rem; color: var(--text-muted);
-            border-top: 1px solid var(--border); padding-top: 2rem;
-        }
-        .hero-tag { color: var(--accent); margin-bottom: 0.5rem; display: block; font-family: var(--font-display);}
+/* --- PROJECTS & PLUGINS CARDS --- */
+.project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+.project-card {
+    background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px;
+    padding: 2.5rem; transition: var(--transition-bounce); display: flex; flex-direction: column;
+    height: 100%; position: relative; overflow: hidden;
+}
+.project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--gradient-primary); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+}
+.project-card:hover { transform: translateY(-10px); box-shadow: var(--hover-shadow); border-color: rgba(99,102,241,0.2); }
+.project-card:hover::before { transform: scaleX(1); }
 
-        .marquee {
-            padding: 2rem 0; background: var(--accent); color: #000;
-            overflow: hidden; white-space: nowrap; position: relative; z-index: 2;
-            transform: rotate(-2deg) scale(1.05); margin: 4rem 0;
-        }
-        .marquee-inner { display: inline-block; animation: scroll 20s linear infinite; }
-        .marquee span {
-            font-family: var(--font-display); font-weight: 700; font-size: 2.5rem;
-            text-transform: uppercase; margin-right: 4rem;
-        }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+.project-icon {
+    width: 65px; height: 65px; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);
+    border-radius: 18px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; transition: var(--transition-bounce);
+}
+.project-card:hover .project-icon { transform: rotate(-10deg) scale(1.1); background: var(--accent-blue); color: white; }
+.project-icon.wp { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+.project-card:hover .project-icon.wp { background: var(--accent-purple); color: white; }
 
-        .section-title {
-            font-family: var(--font-display); font-size: clamp(2rem, 4vw, 4rem);
-            margin-bottom: 4rem; display: flex; align-items: baseline; gap: 20px;
-        }
-        .section-num {
-            font-size: 1.2rem; color: var(--accent); font-family: var(--font-body);
-            transform: translateY(-50%); display: inline-block;
-        }
+.project-links a {
+    width: 45px; height: 45px; border-radius: 50%; background: var(--bg-main);
+    display: flex; justify-content: center; align-items: center; color: var(--text-secondary);
+    border: 1px solid var(--border-color); transition: var(--transition-bounce); font-size: 1.1rem;
+}
+.project-links a:hover { background: var(--accent-indigo); color: white; border-color: var(--accent-indigo); transform: translateY(-3px) rotate(15deg); }
 
-        .about-grid {
-            display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem;
-            margin-bottom: 8rem;
-        }
-        .about-text p {
-            font-size: 1.8rem; line-height: 1.4; margin-bottom: 2rem;
-            color: var(--text-muted);
-        }
-        .stats-box {
-            background: var(--card-bg); padding: 3rem;
-            border: 1px solid var(--border);
-        }
-        .stat-item { margin-bottom: 2rem; }
-        .stat-num { font-family: var(--font-display); font-size: 4rem; color: var(--accent); line-height: 1; }
-        .stat-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.project-title { font-size: 1.6rem; margin-bottom: 1rem; }
+.project-desc { color: var(--text-secondary); margin-bottom: 2rem; flex-grow: 1; line-height: 1.7; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.ptag {
+    font-family: 'Fira Code', monospace; font-size: 0.75rem; padding: 0.5rem 0.9rem;
+    background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px;
+    color: var(--text-secondary); font-weight: 500; transition: var(--transition-fast);
+}
+.project-card:hover .ptag { background: rgba(99,102,241,0.05); border-color: rgba(99,102,241,0.2); color: var(--accent-indigo); }
 
-        .history-section { padding-bottom: 8rem; }
-        .journey-cards-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 2rem; max-width: 1200px; margin: 0 auto;
-        }
-        .journey-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            padding: 3rem;
-            min-height: 400px;
-            display: flex; flex-direction: column; justify-content: flex-end;
-            position: relative; overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        .journey-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            transform: translateY(-5px);
-        }
+/* --- FOOTER --- */
+footer { background: #0f172a; color: white; padding: 8rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+.footer-cta { margin-bottom: 5rem; }
+.footer-title { font-size: clamp(3rem, 7vw, 5.5rem); margin-bottom: 1rem; letter-spacing: -1px; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.footer-subtitle { color: #94a3b8; font-family: 'Fira Code', monospace; margin-bottom: 3rem; font-size: 1.1rem; letter-spacing: 2px; }
+.footer-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 4rem; }
+.footer-links a {
+    display: flex; align-items: center; gap: 0.75rem; padding: 1.2rem 2.5rem;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; font-weight: 500; transition: var(--transition-bounce);
+}
+.footer-links a:hover { background: var(--accent-indigo); border-color: var(--accent-indigo); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
+.footer-links a i { font-size: 1.2rem; }
+.footer-bottom { padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #64748b; font-size: 0.9rem; }
 
-        .bg-icon {
-            position: absolute; right: -20px; bottom: -40px;
-            font-size: 12rem; color: var(--accent);
-            opacity: 0; pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform: rotate(0deg) scale(0.5); z-index: 1; filter: blur(2px);
-        }
-        .journey-card:hover .bg-icon { opacity: 0.15; transform: rotate(-15deg) scale(1); right: -10px; bottom: -20px; }
+/* --- ANIMATIONS --- */
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal.active { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: 0.15s; }
+.delay-2 { transition-delay: 0.3s; }
+.delay-3 { transition-delay: 0.45s; }
 
-        .card-content { position: relative; z-index: 2; }
-        .t-year {
-            display: block; font-size: 0.9rem; color: var(--accent);
-            text-transform: uppercase; letter-spacing: 2px; font-weight: 700;
-            margin-bottom: 1.5rem; font-family: var(--font-body);
-        }
-        .t-role {
-            font-family: var(--font-display); font-size: 2rem; font-weight: 600;
-            color: var(--text-main); margin-bottom: 0.5rem; line-height: 1.2;
-        }
-        .t-company {
-            display: inline-block; font-size: 1.2rem; color: var(--accent);
-            text-shadow: 0 0 10px rgba(212, 255, 0, 0.3);
-            margin-bottom: 1.5rem; font-weight: 600; letter-spacing: 0.5px;
-        }
-        .t-desc { font-size: 1rem; line-height: 1.6; color: var(--text-muted); }
+@keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+@keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -30px) scale(1.1); } 100% { transform: translate(0, 0) scale(1); } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 70% { box-shadow: 0 0 0 12px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
 
-        /* =========================================
-           TECH BUCKET (SKILLS)
-           ========================================= */
-        .skills-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px; padding-bottom: 8rem;
-        }
-        .skill-card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            padding: 2rem; position: relative; overflow: hidden;
-            opacity: 0; transform: translateY(20px);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            --neon-color: var(--accent);
-        }
-        .skill-card:nth-child(1) { --neon-color: #8892bf; } 
-        .skill-card:nth-child(2) { --neon-color: #ff2d20; } 
-        .skill-card:nth-child(3) { --neon-color: #61dafb; } 
-        .skill-card:nth-child(4) { --neon-color: #ffffff; } 
-        .skill-card:nth-child(5) { --neon-color: #f29111; } 
-        .skill-card:nth-child(6) { --neon-color: #ff00ff; } 
+/* --- RESPONSIVENESS --- */
+@media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 4rem; }
+    .hero-content { display: flex; flex-direction: column; align-items: center; }
+    .hero-buttons { justify-content: center; }
+    .hero-stats { justify-content: center; width: 100%; }
+    .hero-image { max-width: 450px; margin: 0 auto; }
+    .floating-badge { padding: 0.8rem 1.2rem; }
+    .floating-badge strong { font-size: 0.9rem; }
+}
 
-        .skill-card:hover {
-            border-color: var(--neon-color);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.5);
-            transform: translateY(-10px) scale(1.02);
-        }
-        .skill-name {
-            font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;
-            position: relative; z-index: 2; transition: color 0.3s;
-        }
-        .skill-card:hover .skill-name { color: var(--neon-color); text-shadow: 0 0 10px var(--neon-color); }
-        .skill-level { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; position: relative; z-index: 2; }
-        .skill-icon {
-            position: absolute; right: -20px; bottom: -20px;
-            font-size: 6rem; color: rgba(255,255,255,0.03);
-            font-family: var(--font-display); transition: 0.4s ease-out; z-index: 1;
-        }
-        .skill-card:hover .skill-icon {
-            transform: rotate(-10deg) scale(1.2) translate(-10px, -10px);
-            color: var(--neon-color); opacity: 0.2;
-        }
+@media (max-width: 768px) {
+    /* Mobile Menu Toggle */
+    .mobile-menu-btn { display: block; }
+    .nav-links {
+        position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-secondary);
+        flex-direction: column; padding: 2rem; gap: 1.5rem; border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1); transform: translateY(-150%); opacity: 0;
+        transition: var(--transition-smooth); z-index: 1000;
+    }
+    .nav-links.active { transform: translateY(0); opacity: 1; }
+    .btn-nav { width: 100%; text-align: center; }
+    
+    .section-container { padding: 6rem 1.5rem; }
+    .hero { padding-top: 7rem; }
+    .hero-stats { flex-wrap: wrap; gap: 2rem; }
+    .stat h4 { font-size: 2rem; }
+    
+    .timeline { padding-left: 0; }
+    .timeline::before { left: 0; }
+    .timeline-item { padding-left: 2.5rem; }
+    .timeline-dot { left: -11px; width: 20px; height: 20px; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+    .timeline-content { padding: 1.8rem; }
+    
+    .project-grid { grid-template-columns: 1fr; }
+    .code-body { padding: 1.5rem; font-size: 0.85rem; }
+    
+    .badge-top { top: -1rem; right: -1rem; }
+    .badge-bottom { bottom: -1rem; left: -1rem; }
+}
 
-        /* =========================================
-           TOOLS SECTION
-           ========================================= */
-        .tools-section { padding-bottom: 8rem; }
-        
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .tool-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            transition: all 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .tool-card::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: -100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 255, 0, 0.2), transparent);
-            transition: left 0.5s ease;
-            pointer-events: none;
-        }
-        
-        .tool-card:hover::after {
-            left: 100%;
-        }
-        
-        .tool-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 20px rgba(212, 255, 0, 0.05);
-            transform: translateY(-8px) scale(1.05);
-        }
-        
-        .tool-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            transition: all 0.4s ease;
-            filter: drop-shadow(0 0 5px rgba(212, 255, 0, 0.3));
-            color: var(--text-main);
-        }
-        
-        .tool-card:hover .tool-icon {
-            color: var(--accent);
-            filter: drop-shadow(0 0 15px rgba(212, 255, 0, 0.6));
-            transform: scale(1.2) rotate(10deg);
-        }
-        
-        .tool-name {
-            font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-main);
-            position: relative;
-            z-index: 2;
-        }
-
-        /* =========================================
-           PROJECTS
-           ========================================= */
-        #work { padding-bottom: 8rem; }
-        .projects-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 20px; width: 100%;
-        }
-        .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            min-height: 450px; padding: 2rem;
-            position: relative; overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            cursor: pointer; opacity: 0; transform: translateY(30px);
-        }
-        .pc-num {
-            position: absolute; top: -20px; right: -10px;
-            font-family: var(--font-display); font-size: 8rem;
-            color: rgba(255,255,255,0.02); font-weight: 700;
-            transition: 0.4s; line-height: 1;
-        }
-        .project-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
-        .project-card:hover .pc-num { color: var(--accent); opacity: 0.1; transform: scale(1.1); }
-        
-        .pc-head { margin-bottom: auto; position: relative; z-index: 2; }
-        .pc-cat { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 1rem; display: block; }
-        .pc-title { font-family: var(--font-display); font-size: 1.8rem; line-height: 1.1; margin-bottom: 1rem; color: var(--text-main); }
-        .pc-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .pc-footer { margin-top: 2rem; display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
-        .pc-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .pc-tag { font-size: 0.7rem; border: 1px solid var(--border); padding: 4px 10px; border-radius: 50px; color: #D5FF03; background: rgba(212, 212, 212, 0); }
-        .pc-arrow {
-            width: 40px; height: 40px; border-radius: 50%; background: var(--border);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-main); transition: 0.3s; font-size: 1.2rem;
-        }
-        .project-card:hover .pc-arrow { background: var(--accent); color: #000; transform: rotate(-45deg); }
-
-        /* =========================================
-           FOOTER - FIXED
-           ========================================= */
-        .footer { 
-            padding: 8rem 5% 4rem; 
-            text-align: center; 
-            background: #050505; 
-            position: relative; 
-            z-index: 2;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        body.light-mode .footer { background: #dedede; }
-        .cta-text { font-family: var(--font-display); font-size: 8vw; line-height: 1; margin-bottom: 2rem; color: var(--text-main); display: inline-block; }
-        .cta-sub { color: var(--accent); font-size: 1.2rem; margin-bottom: 1rem; letter-spacing: 2px;}
-        .socials { display: flex; justify-content: center; gap: 40px; margin-top: 4rem; font-size: 1.2rem; flex-wrap: wrap; }
-        .socials a { position: relative; overflow: hidden; }
-        .socials a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
-        .socials a:hover::after { width: 100%; }
-        .socials a.email-link { color: var(--accent); font-weight: 500; }
-        .copy { margin-top: 4rem; color: var(--text-muted); font-size: 0.9rem; }
-        .reveal-text { opacity: 0; }
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
-        @media (max-width: 1400px) { 
-            .projects-grid { grid-template-columns: repeat(3, 1fr); } 
-        }
-
-        @media (max-width: 1024px) { 
-            .projects-grid { grid-template-columns: repeat(2, 1fr); } 
-            .hero-title { font-size: 4rem; }
-            .about-grid { grid-template-columns: 1fr; }
-            .journey-cards-grid { grid-template-columns: 1fr; }
-            .tools-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-        }
-
-        @media (max-width: 768px) {
-            .projects-grid { grid-template-columns: 1fr; }
-            .hero-meta { flex-direction: column; align-items: flex-start; gap: 2rem; }
-            .about-grid { grid-template-columns: 1fr; }
-            .journey-cards-grid { grid-template-columns: 1fr; }
-            .lamp-assembly { right: 20px; transform: scale(0.8); }
-            .tools-grid { grid-template-columns: repeat(2, 1fr); }
-            .marquee span { font-size: 1.5rem; }
-            .hero-title { font-size: 2.5rem; }
-            .section-title { font-size: 2rem; }
-            .skills-grid { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 480px) {
-            .container { padding: 0 4%; }
-            .projects-grid { gap: 15px; }
-            .project-card { min-height: 350px; padding: 1.5rem; }
-            .tools-grid { grid-template-columns: 1fr; }
-            .marquee { margin: 2rem 0; }
-            .footer { padding: 4rem 4% 2rem; }
-            .cta-text { font-size: 5vw; }
-        }
-    </style>
+@media (max-width: 480px) {
+    .hero-content h1 { font-size: 2.5rem; }
+    .hero-buttons { flex-direction: column; width: 100%; }
+    .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+    .floating-badge { display: none; } /* Hide complex badges on very small phones to prevent overflow */
+    .hero-stats { justify-content: space-between; }
+    .stat { text-align: center; width: 45%; }
+}
+</style>
 </head>
 <body>
 
-    <div class="preloader" style="position:fixed; top:0; left:0; width:100%; height:100vh; background:#000; z-index:10000; display:flex; justify-content:center; align-items:center; flex-direction:column;">
-        <div class="loader-text" style="font-family:'Clash Display', sans-serif; font-size:2rem; color:#fff;">MANAS.DEV</div>
-        <div class="loader-bar" style="width:0%; height:2px; background:#D4FF00; margin-top:20px;"></div>
-    </div>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
-
-    <div class="noise"></div>
-
-    <div class="watermark-bg">MANAS</div>
-
-    <div class="lamp-assembly" id="theme-toggle">
-        <div class="cord"></div>
-        <div class="socket-neck"></div>
-        <div class="bulb-glass">
-            <div class="filament"></div>
-            <div class="reflection"></div>
-        </div>
-    </div>
-
-    <!-- STICKY ANIMATED NAVBAR -->
-    <nav id="navbar">
-        <div class="logo interactable">MANAS</div>
+<nav id="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo">Manas<span>.</span></a>
         
-        <div class="nav-menu">
-            <a href="#hero" class="nav-link">Launchpad</a>
-            <a href="#about" class="nav-link">Who I Am</a>
-            <a href="#skills" class="nav-link">Arsenal</a>
-            <a href="#tools" class="nav-link">Tools</a>
-            <a href="#work" class="nav-link">Projects</a>
-            <a href="#contact" class="nav-link">Contact Us</a>
-        </div>
-
-        <button class="nav-toggle" id="nav-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
+        <button class="mobile-menu-btn" id="mobile-btn" aria-label="Menu">
+            <i class="fa-solid fa-bars"></i>
         </button>
 
-        <div class="nav-overlay" id="nav-overlay"></div>
-    </nav>
+        <div class="nav-links" id="nav-links">
+            <a href="#about" class="nav-item">About</a>
+            <a href="#skills" class="nav-item">Skills</a>
+            <a href="#experience" class="nav-item">Experience</a>
+            <a href="#projects" class="nav-item">Work</a>
+            <a href="#contact" class="btn-nav nav-item">Let's Talk</a>
+        </div>
+    </div>
+</nav>
 
-    <main>
-        <section class="hero container" id="hero">
-            <h1 class="hero-title">
-                <span class="line"><span class="word">ARCHITECTING</span></span>
-                <span class="line"><span class="word">THE DIGITAL</span></span>
-                <span class="line"><span class="word" style="color: var(--accent);">FUTURE</span></span>
-            </h1>
-
-            <div class="hero-meta reveal-section">
-                <div class="stack">
-                    <span class="hero-tag">CORE STACK</span>
-                    PHP / Laravel / React / Next.js
-                </div>
-                <div class="location">
-                    <span class="hero-tag">BASED IN</span>
-                    India, Available Globally
-                </div>
-                <div class="scroll-prompt">
-                    ( SCROLL TO EXPLORE )
-                </div>
+<section class="hero section-container" id="home">
+    <div class="hero-grid">
+        <div class="hero-content">
+            <div class="section-subtitle reveal">Available for Projects</div>
+            <h1 class="reveal delay-1">Hi, I'm <br><span class="text-gradient">Manas Sharma</span></h1>
+            <p class="reveal delay-2">Full Stack Developer architecting scalable backend systems and crafting pixel-perfect frontends. From Laravel APIs to Next.js interfaces — building products that perform at scale.</p>
+            
+            <div class="hero-buttons reveal delay-3">
+                <a href="#projects" class="btn-primary">View My Work <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="https://github.com/ManasFR" target="_blank" class="btn-outline"><i class="fa-brands fa-github"></i> GitHub</a>
             </div>
-        </section>
 
-        <div class="marquee">
-            <div class="marquee-inner">
-                <span>Full Stack  •  Laravel  •  React  •  Next.js  •  PHP  •  Creative Coding  •  UI/UX  • </span>
-                <span>Full Stack  •  Laravel  •  React  •  Next.js  •  PHP  •  Creative Coding  •  UI/UX  • </span>
+            <div class="hero-stats reveal delay-3">
+                <div class="stat">
+                    <h4>3<span>+</span></h4>
+                    <p>Years Exp</p>
+                </div>
+                <div class="stat">
+                    <h4>40<span>+</span></h4>
+                    <p>Projects</p>
+                </div>
+                <div class="stat">
+                    <h4>5</h4>
+                    <p>Devs Led</p>
+                </div>
             </div>
         </div>
 
-        <section class="container" id="about">
-            <div class="section-title reveal-section">
-                <span class="section-num">01</span>
-                <h2>WHO I AM</h2>
-            </div>
-            <div class="about-grid">
-                <div class="about-text reveal-section">
-                    <p>I build distinct digital experiences by merging robust backend logic with frontend magic. As a Full Stack Developer, I don't just write code; I architect solutions.</p>
-                    <p>Specializing in the Laravel & React ecosystems, I help startups and established brands transform complex requirements into seamless, high-performance web applications.</p>
-                </div>
-                <div class="stats-box reveal-section">
-                    <div class="stat-item">
-                        <div class="stat-num">3+</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-num">40+</div>
-                        <div class="stat-label">Projects Delivered</div>
-                    </div>
+        <div class="hero-image-wrapper reveal delay-2">
+            <div class="floating-badge badge-top">
+                <i class="devicon-laravel-plain colored" style="font-size: 2.2rem;"></i>
+                <div>
+                    <strong>Laravel Expert</strong>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Backend Architecture</div>
                 </div>
             </div>
-        </section>
-
-        <section class="container history-section" id="history">
-            <div class="section-title reveal-section">
-                <span class="section-num">02</span>
-                <h2>JOURNEY LOG</h2>
+            <div class="floating-badge badge-bottom">
+                <div class="status-dot"></div>
+                <div>
+                    <strong>Open to Work</strong>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Full Stack Dev</div>
+                </div>
             </div>
             
-            <div class="journey-cards-grid">
-                <a href="https://Digirank360.com" target="_blank">
-                    <div class="journey-card interactable">
-                        <i class="ri-wordpress-fill bg-icon"></i>
-                        <div class="card-content">
-                            <span class="t-year">2022 – 2023</span>
-                            <h3 class="t-role">Wordpress Dev</h3>
-                            <span class="t-company">@Digirank360</span>
-                            <p class="t-desc">Crafted custom themes and plugins. Mastered the art of turning coffee into client solutions.</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="https://theiade.in/" target="_blank">
-                    <div class="journey-card interactable">
-                        <i class="ri-code-s-slash-line bg-icon"></i>
-                        <div class="card-content">
-                            <span class="t-year">2022 – 2023</span>
-                            <h3 class="t-role">PHP Trainer</h3>
-                            <span class="t-company">@IADE</span>
-                            <p class="t-desc">Mentored 50+ students in Core PHP. Built a curriculum that bridged theory and production.</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="https://thatha.org/" target="_blank">
-                    <div class="journey-card interactable">
-                        <i class="ri-database-2-fill bg-icon"></i>
-                        <div class="card-content">
-                            <span class="t-year">2023 – 2024</span>
-                            <h3 class="t-role">Senior PHP Dev</h3>
-                            <span class="t-company">@THAtha</span>
-                            <p class="t-desc">Architected high-performance APIs and optimized databases using MySQL and Redis.</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="https://dealmirror.com" target="_blank">
-                    <div class="journey-card interactable">
-                        <i class="ri-stack-fill bg-icon"></i>
-                        <div class="card-content">
-                            <span class="t-year">2025 – PRESENT</span>
-                            <h3 class="t-role">Lead Full Stack</h3>
-                            <span class="t-company">@Dealmirror</span>
-                            <p class="t-desc">Leading 5 devs. Scaling SaaS platforms with Laravel 10 & Next.js. Building the future.</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <section class="container" id="skills">
-            <div class="section-title reveal-section">
-                <span class="section-num">03</span>
-                <h2>TECH BUCKET</h2>
-            </div>
-            <div class="skills-grid">
-                <div class="skill-card interactable">
-                    <div class="skill-name">Laravel</div>
-                    <div class="skill-level">^V10 • Architecture</div>
-                    <div class="skill-icon">L</div>
-                </div>
-                <div class="skill-card interactable">
-                    <div class="skill-name">Next.js</div>
-                    <div class="skill-level">V14 • SSR/CSR</div>
-                    <div class="skill-icon">N</div>
-                </div>
-                <div class="skill-card interactable">
-                    <div class="skill-name">CodeIgniter</div>
-                    <div class="skill-level">^V14 • MVC Architecture</div>
-                    <div class="skill-icon">C</div>
-                </div>
-                <div class="skill-card interactable">
-                    <div class="skill-name">PHP</div>
-                    <div class="skill-level">3 Years • Expert</div>
-                    <div class="skill-icon">P</div>
-                </div>
-                <div class="skill-card interactable">
-                    <div class="skill-name">SQL</div>
-                    <div class="skill-level">MySQL • PostgreSQL</div>
-                    <div class="skill-icon">S</div>
-                </div>
-                <div class="skill-card interactable">
-                    <div class="skill-name">Wordpress</div>
-                    <div class="skill-level">Woocommerce • SMTP</div>
-                    <div class="skill-icon">W</div>
+            <div class="hero-image">
+                <div class="hero-image-content">
+                    <h3>MANAS SHARMA</h3>
+                    <p>// INDIA</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
-        <!-- TOOLS SECTION -->
-        <section class="container tools-section" id="tools">
-            <div class="section-title reveal-section">
-                <span class="section-num">03.5</span>
-                <h2>TECH TOOLS</h2>
+<section class="section-container" id="about">
+    <div class="section-header reveal">
+        <div class="section-subtitle"><i class="fa-solid fa-microchip"></i> System Specs</div>
+        <h2 class="section-title">Initialize <span class="text-gradient">Developer</span></h2>
+    </div>
+
+    <div class="about-bento reveal delay-1">
+        <div class="code-window">
+            <div class="code-header">
+                <div class="mac-dot red"></div>
+                <div class="mac-dot yellow"></div>
+                <div class="mac-dot green"></div>
+                <span style="margin-left: 1rem; color: #94a3b8; font-family: monospace; font-size: 0.85rem;">manas_profile.js</span>
             </div>
-            <div class="tools-grid">
-                <div class="tool-card interactable">
-                    <div class="tool-icon"><i class="ri-github-fill"></i></div>
-                    <div class="tool-name">Github</div>
-                </div>
-                <div class="tool-card interactable">
-                    <div class="tool-icon"><i class="ri-global-line"></i></div>
-                    <div class="tool-name">Vercel</div>
-                </div>
-                <div class="tool-card interactable">
-                    <div class="tool-icon"><i class="ri-cloud-line"></i></div>
-                    <div class="tool-name">AWS EC2</div>
-                </div>
-                <div class="tool-card interactable">
-                    <div class="tool-icon"><i class="ri-folder-3-line"></i></div>
-                    <div class="tool-name">Composer</div>
-                </div>
-                <div class="tool-card interactable">
-                    <div class="tool-icon"><i class="ri-npm-fill"></i></div>
-                    <div class="tool-name">NPM</div>
-                </div>
-                <div class="tool-card interactable">
-                    <div class="tool-icon"><i class="ri-mail-check-line"></i></div>
-                    <div class="tool-name">Postman</div>
-                </div>
+            <div class="code-body">
+                <span class="c-comment">// Manas Sharma — v3.0.2026</span><br>
+                <span class="c-keyword">const</span> <span class="c-func">developer</span> = {<br>
+                &nbsp;&nbsp;name: <span class="c-string">"Manas Sharma"</span>,<br>
+                &nbsp;&nbsp;location: <span class="c-string">"India"</span>,<br>
+                &nbsp;&nbsp;status: <span class="c-string">"Available for Hire"</span>,<br>
+                &nbsp;&nbsp;focus: [<span class="c-string">"Laravel"</span>, <span class="c-string">"React"</span>, <span class="c-string">"Next.js"</span>],<br>
+                &nbsp;&nbsp;currentRole: <span class="c-string">"Lead Full Stack Dev @ Dealmirror"</span>,<br>
+                &nbsp;&nbsp;passion: <span class="c-string">"Clean Code & Architecture"</span>,<br>
+                &nbsp;&nbsp;mission: <span class="c-string">"Transform complex requirements into high-performance web apps."</span><br>
+                };<br><br>
+                <span class="c-keyword">export default</span> developer;
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
-        <section class="container" id="work">
-            <div class="section-title reveal-section">
-                <span class="section-num">04</span>
-                <h2>SELECTED WORKS</h2>
-            </div>
+<section class="section-container" id="skills">
+    <div class="section-header reveal">
+        <div class="section-subtitle"><i class="fa-solid fa-layer-group"></i> Tech Environment</div>
+        <h2 class="section-title">My <span class="text-gradient">Stack</span></h2>
+    </div>
 
-            <div class="projects-grid">
-                <a href="https://myverilock.com" target="_blank" class="project-card interactable">
-                    <div class="pc-num">01</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">SaaS Platform</span>
-                        <h3 class="pc-title">Verilock</h3>
-                        <p class="pc-desc">SaaS license management platform with robust key generation, verification system, and real-time analytics dashboard built with Laravel and MySQL.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Laravel</span><span class="pc-tag">MySQL</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://credbird.co/" target="_blank" class="project-card interactable">
-                    <div class="pc-num">02</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Fintech</span>
-                        <h3 class="pc-title">Credbird</h3>
-                        <p class="pc-desc">International payment transfer system with secure API integration, multi-currency support, and real-time transaction processing using Laravel.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Laravel</span><span class="pc-tag">API</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://duprun.com" target="_blank" class="project-card interactable">
-                    <div class="pc-num">03</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">AI Media</span>
-                        <h3 class="pc-title">DUPRUN</h3>
-                        <p class="pc-desc">Screenshot automation tool that enables users to create videos from images, add music, customize fonts, and build multi-slide presentations.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Next.js</span><span class="pc-tag">React</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://sendgomail.com/" target="_blank" class="project-card interactable">
-                    <div class="pc-num">04</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Email Marketing</span>
-                        <h3 class="pc-title">Sendgomail</h3>
-                        <p class="pc-desc">Bulk email automation platform with 50+ SMTP integration, advanced scheduling, and comprehensive analytics for enterprise-level campaigns.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Laravel</span><span class="pc-tag">SMTP</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://dealmirror.com/product/atcoupon-smart-coupons-automation-plugin-to-boost-conversion/" target="_blank" class="project-card interactable">
-                    <div class="pc-num">05</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">WordPress Plugin</span>
-                        <h3 class="pc-title">ATCoupon</h3>
-                        <p class="pc-desc">Smart coupon automation WordPress plugin with licensing system designed to boost conversion rates through intelligent discount management.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">WordPress</span><span class="pc-tag">PHP</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <div class="project-card interactable">
-                    <div class="pc-num">06</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Laravel + React</span>
-                        <h3 class="pc-title">RealEstate</h3>
-                        <p class="pc-desc">Real estate platform which help to collect leads from the website and analyze the full analytics of your customers need. </p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Laravel</span><span class="pc-tag">React</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </div>
-
-                <div class="project-card interactable">
-                    <div class="pc-num">07</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Dashboard</span>
-                        <h3 class="pc-title">Analytix</h3>
-                        <p class="pc-desc">Internal admin dashboard for monitoring server health and user metrics in real-time.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Laravel</span><span class="pc-tag">Livewire</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </div>
-
-                <div class="project-card interactable">
-                    <div class="pc-num">08</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Social</span>
-                        <h3 class="pc-title">Connect API</h3>
-                        <p class="pc-desc">Backend infrastructure for a social media app handling chat, notifications, and feed generation.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Laravel</span><span class="pc-tag">Postgres</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- BUILD PLUGINS SECTION -->
-        <section class="container" id="plugins">
-            <div class="section-title reveal-section">
-                <span class="section-num">05</span>
-                <h2>BUILD PLUGINS</h2>
-            </div>
-
-            <div class="projects-grid">
-                <a href="https://dealmirror.com" target="_blank" class="project-card interactable">
-                    <div class="pc-num">01</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Home Controller</span>
-                        <h3 class="pc-title">Producty</h3>
-                        <p class="pc-desc">Build a plugin from scratch that fully controls the homepage deals and logic controller, including deal arrangement and ribbon timer. It should also provide functions to create custom WooCommerce-based filters and a custom shortcode generator.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Wordpress</span><span class="pc-tag">Ajax</span></div>
-                    </div>
-                </a>
-
-                <a href="https://dealmirror.com/product/duprun" target="_blank" class="project-card interactable">
-                    <div class="pc-num">02</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Pricing Plan</span>
-                        <h3 class="pc-title">WooPrice</h3>
-                        <p class="pc-desc">A custom-built plugin from scratch to create multiple plans and assign license codes for the same WooCommerce product without using ACF fields. </p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Woocommerce</span><span class="pc-tag">License</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://dealmirror.com/product/aiwritio/" target="_blank" class="project-card interactable">
-                    <div class="pc-num">03</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">AI Writer</span>
-                        <h3 class="pc-title">AiWritio</h3>
-                        <p class="pc-desc">A plugin which help you to create a outstanding blogs base on your niche like newsletter, blogs and etc using AI.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">AI</span><span class="pc-tag">Blog</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://dealmirror.com/product/youtbeify/" target="_blank" class="project-card interactable">
-                    <div class="pc-num">04</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Youtube AI</span>
-                        <h3 class="pc-title">Youtubeify</h3>
-                        <p class="pc-desc">Convert your youtube video to blogs in your wordpress site using AI.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Wordpress</span><span class="pc-tag">AI</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://dealmirror.com/product/atcoupon-smart-coupons-automation-plugin-to-boost-conversion/" target="_blank" class="project-card interactable">
-                    <div class="pc-num">05</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">WordPress Plugin</span>
-                        <h3 class="pc-title">ATCoupon</h3>
-                        <p class="pc-desc">Smart coupon automation WordPress plugin with licensing system designed to boost conversion rates through intelligent discount management.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">WordPress</span><span class="pc-tag">PHP</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <a href="https://dealmirror.com/product/appointiqo/" target="_blank" class="project-card interactable">
-                    <div class="pc-num">06</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Appointment</span>
-                        <h3 class="pc-title">Appointiqo</h3>
-                        <p class="pc-desc">Simplify Your Scheduling with a Smart WordPress Booking Plugin and also integrated with stripe & razorpay.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Wordpress</span><span class="pc-tag">Appointment</span></div>
-                        <div class="pc-arrow"><i class="ri-arrow-right-line"></i></div>
-                    </div>
-                </a>
-
-                <div class="project-card interactable">
-                    <div class="pc-num">07</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Order</span>
-                        <h3 class="pc-title">OrdlyPDF</h3>
-                        <p class="pc-desc">Convert WooCommerce order details into a professional receipt for easier disputes and refunds. </p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Woocommerce</span><span class="pc-tag">PDF</span></div>
-                    </div>
-                </div>
-
-                <div class="project-card interactable">
-                    <div class="pc-num">08</div>
-                    <div class="pc-head">
-                        <span class="pc-cat">Refund</span>
-                        <h3 class="pc-title">Refreq</h3>
-                        <p class="pc-desc">Create a custom-built plugin to manage refund requests directly within WooCommerce orders, including request submission, approval workflow, status tracking, and structured refund records inside the order details page.</p>
-                    </div>
-                    <div class="pc-footer">
-                        <div class="pc-tags"><span class="pc-tag">Refund</span><span class="pc-tag">Woocommerce</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer class="footer" id="contact">
-            <div class="reveal-section">
-                <div class="cta-sub">GOT AN IDEA?</div>
-                <div class="cta-text">
-                    <span>LET'S TALK</span>
-                </div>
-            </div>
-            <div class="socials reveal-section">
-                <a href="https://in.linkedin.com/in/manas-sharma-3202131b7" class="interactable">LinkedIn</a>
-                <a href="https://github.com/ManasFR" class="interactable">GitHub</a>
-                <a href="mailto:maxsharmafeb@gmail.com" class="interactable email-link">Email</a>
-            </div>
-            <div class="copy">
-                &copy; 2024 MANAS. Developed with ❤️
-            </div>
-        </footer>
-
-    </main>
-
-    <script>
-        /* ===== CURSOR ===== */
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
+    <div class="skills-grid">
+        <div class="skill-card reveal">
+            <i class="devicon-laravel-plain colored"></i>
+            <div><h4>Laravel</h4><p>MVC · Eloquent</p></div>
+        </div>
+        <div class="skill-card reveal delay-1">
+            <i class="devicon-react-original colored"></i>
+            <div><h4>React</h4><p>Hooks · Context</p></div>
+        </div>
+        <div class="skill-card reveal delay-2">
+            <i class="devicon-nextjs-plain" style="color: var(--text-primary)"></i>
+            <div><h4>Next.js</h4><p>SSR · SSG</p></div>
+        </div>
+        <div class="skill-card reveal delay-3">
+            <i class="devicon-nodejs-plain colored"></i>
+            <div><h4>Node.js</h4><p>Express · APIs</p></div>
+        </div>
         
-        window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-            
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
-        });
+        <div class="skill-card reveal">
+            <i class="devicon-php-plain colored"></i>
+            <div><h4>PHP</h4><p>OOP · Core</p></div>
+        </div>
+        <div class="skill-card reveal delay-1">
+            <i class="devicon-mysql-plain colored"></i>
+            <div><h4>MySQL</h4><p>Relational DB</p></div>
+        </div>
+        <div class="skill-card reveal delay-2">
+            <i class="devicon-postgresql-plain colored"></i>
+            <div><h4>PostgreSQL</h4><p>Advanced Queries</p></div>
+        </div>
+        <div class="skill-card reveal delay-3">
+            <i class="devicon-redis-plain colored"></i>
+            <div><h4>Redis</h4><p>Caching · Queues</p></div>
+        </div>
 
-        document.querySelectorAll('.interactable').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-        });
+        <div class="skill-card reveal">
+            <i class="devicon-tailwindcss-plain colored"></i>
+            <div><h4>Tailwind</h4><p>Utility-First</p></div>
+        </div>
+        <div class="skill-card reveal delay-1">
+            <i class="devicon-wordpress-plain colored"></i>
+            <div><h4>WordPress</h4><p>Custom Plugins</p></div>
+        </div>
+        <div class="skill-card reveal delay-2">
+            <i class="devicon-amazonwebservices-original colored"></i>
+            <div><h4>AWS EC2</h4><p>Cloud Hosting</p></div>
+        </div>
+        <div class="skill-card reveal delay-3">
+            <i class="devicon-github-original" style="color: var(--text-primary)"></i>
+            <div><h4>GitHub</h4><p>Version Control</p></div>
+        </div>
+    </div>
+</section>
 
-        /* ===== STICKY ANIMATED NAVBAR ===== */
-        const navbar = document.getElementById('navbar');
-        const navToggle = document.getElementById('nav-toggle');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const navOverlay = document.getElementById('nav-overlay');
+<section class="section-container" id="experience">
+    <div class="section-header reveal">
+        <div class="section-subtitle"><i class="fa-solid fa-briefcase"></i> Execution Trace</div>
+        <h2 class="section-title">Work <span class="text-gradient">Experience</span></h2>
+    </div>
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('nav-scrolled');
-            } else {
-                navbar.classList.remove('nav-scrolled');
-            }
-        });
+    <div class="timeline">
+        <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <span class="timeline-date">2025 – Present</span>
+                <h3>Lead Full Stack Developer</h3>
+                <div class="timeline-company">@ <a href="https://dealmirror.com" target="_blank">Dealmirror</a></div>
+                <p>Leading a team of 5 developers. Scaling SaaS platforms with Laravel 10 & Next.js. Directing end-to-end development lifecycles and architecting complex platforms using Laravel for backend microservices and Next.js for high-speed, SEO-optimized frontends.</p>
+            </div>
+        </div>
 
-        navToggle.addEventListener('click', () => {
-            navbar.classList.toggle('active');
-        });
+        <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <span class="timeline-date">2023 – 2024</span>
+                <h3>Senior PHP Developer</h3>
+                <div class="timeline-company">@ <a href="https://thatha.org/" target="_blank">THAtha</a></div>
+                <p>Architected high-performance APIs and optimized databases using MySQL and Redis. Engineered scalable backend solutions, robust RESTful APIs, and optimized SQL databases handling thousands of concurrent enterprise transactions.</p>
+            </div>
+        </div>
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-                
-                // Close menu
-                navbar.classList.remove('active');
-                
-                // Smooth scroll to section
-                if (targetSection) {
-                    const offsetTop = targetSection.offsetTop - 100;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
+        <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <span class="timeline-date">2022 – 2023</span>
+                <h3>PHP Trainer</h3>
+                <div class="timeline-company">@ <a href="https://theiade.in/" target="_blank">IADE</a></div>
+                <p>Mentored 50+ students in Core PHP. Built a curriculum bridging theory and production. Taught OOP, MySQL design, and modern web methodologies.</p>
+            </div>
+        </div>
 
-        navOverlay.addEventListener('click', () => {
-            navbar.classList.remove('active');
-        });
+        <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <span class="timeline-date">2022 – 2023</span>
+                <h3>WordPress Developer</h3>
+                <div class="timeline-company">@ <a href="https://Digirank360.com" target="_blank">Digirank360</a></div>
+                <p>Crafted custom themes and plugins from scratch. Built custom plugins to extend core WooCommerce functionalities for diverse client requirements.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-        /* ===== THEME TOGGLE ===== */
-        const themeToggle = document.getElementById('theme-toggle');
+<section class="section-container" id="projects">
+    <div class="section-header reveal">
+        <div class="section-subtitle"><i class="fa-solid fa-code"></i> Compiled Output</div>
+        <h2 class="section-title">Selected <span class="text-gradient">Works</span></h2>
+    </div>
+
+    <div class="project-grid">
+        <div class="project-card reveal">
+            <div class="project-header">
+                <div class="project-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="project-links"><a href="https://myverilock.com" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">Verilock</h3>
+            <p class="project-desc">SaaS license management platform with robust key generation, verification system, and real-time analytics dashboard.</p>
+            <div class="project-tags"><span class="ptag">Laravel</span><span class="ptag">MySQL</span><span class="ptag">SaaS</span></div>
+        </div>
+
+        <div class="project-card reveal delay-1">
+            <div class="project-header">
+                <div class="project-icon"><i class="fa-solid fa-credit-card"></i></div>
+                <div class="project-links"><a href="https://credbird.co/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">Credbird</h3>
+            <p class="project-desc">International payment transfer system with secure API integration, multi-currency support, and real-time transaction processing.</p>
+            <div class="project-tags"><span class="ptag">Laravel</span><span class="ptag">API</span><span class="ptag">Fintech</span></div>
+        </div>
+
+        <div class="project-card reveal delay-2">
+            <div class="project-header">
+                <div class="project-icon"><i class="fa-solid fa-film"></i></div>
+                <div class="project-links"><a href="https://duprun.com" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">DUPRUN</h3>
+            <p class="project-desc">Screenshot automation tool — create videos from images, add music, customize fonts, build multi-slide presentations.</p>
+            <div class="project-tags"><span class="ptag">Next.js</span><span class="ptag">React</span><span class="ptag">Media</span></div>
+        </div>
+
+        <div class="project-card reveal">
+            <div class="project-header">
+                <div class="project-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                <div class="project-links"><a href="https://sendgomail.com/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">Sendgomail</h3>
+            <p class="project-desc">Bulk email automation platform with 50+ SMTP integration, advanced scheduling, and enterprise-level campaign analytics.</p>
+            <div class="project-tags"><span class="ptag">Laravel</span><span class="ptag">SMTP</span><span class="ptag">Enterprise</span></div>
+        </div>
+
+        <div class="project-card reveal delay-1">
+            <div class="project-header">
+                <div class="project-icon"><i class="fa-solid fa-building"></i></div>
+            </div>
+            <h3 class="project-title">RealEstate</h3>
+            <p class="project-desc">Real estate platform for lead collection and full customer analytics — helping agents understand buyer behavior.</p>
+            <div class="project-tags"><span class="ptag">Laravel</span><span class="ptag">React</span><span class="ptag">Analytics</span></div>
+        </div>
+
+        <div class="project-card reveal delay-2">
+            <div class="project-header">
+                <div class="project-icon"><i class="fa-solid fa-chart-line"></i></div>
+            </div>
+            <h3 class="project-title">Analytix</h3>
+            <p class="project-desc">Internal admin dashboard for monitoring server health and user metrics in real-time with live charts.</p>
+            <div class="project-tags"><span class="ptag">Laravel</span><span class="ptag">Livewire</span><span class="ptag">Dashboard</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="section-container" id="plugins" style="padding-top: 2rem;">
+    <div class="section-header reveal">
+        <div class="section-subtitle"><i class="fa-brands fa-wordpress"></i> Build Plugins</div>
+        <h2 class="section-title">WordPress <span class="text-gradient">Arsenal</span></h2>
+    </div>
+
+    <div class="project-grid">
+        <div class="project-card reveal">
+            <div class="project-header">
+                <div class="project-icon wp"><i class="fa-solid fa-gears"></i></div>
+                <div class="project-links"><a href="https://dealmirror.com" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">Producty</h3>
+            <p class="project-desc">Controls homepage deals & logic, deal arrangement, ribbon timers, custom WooCommerce filters, and shortcode generator.</p>
+            <div class="project-tags"><span class="ptag">WordPress</span><span class="ptag">Ajax</span></div>
+        </div>
+
+        <div class="project-card reveal delay-1">
+            <div class="project-header">
+                <div class="project-icon wp"><i class="fa-solid fa-tags"></i></div>
+                <div class="project-links"><a href="https://dealmirror.com/product/duprun" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">WooPrice</h3>
+            <p class="project-desc">Create multiple plans and assign license codes for the same WooCommerce product — without ACF fields.</p>
+            <div class="project-tags"><span class="ptag">WooCommerce</span><span class="ptag">License</span></div>
+        </div>
+
+        <div class="project-card reveal delay-2">
+            <div class="project-header">
+                <div class="project-icon wp"><i class="fa-solid fa-robot"></i></div>
+                <div class="project-links"><a href="https://dealmirror.com/product/aiwritio/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">AiWritio</h3>
+            <p class="project-desc">AI-powered plugin that creates outstanding blogs — newsletters, articles, and more, tailored to your niche.</p>
+            <div class="project-tags"><span class="ptag">AI</span><span class="ptag">Blog</span><span class="ptag">WordPress</span></div>
+        </div>
+
+        <div class="project-card reveal">
+            <div class="project-header">
+                <div class="project-icon wp"><i class="fa-brands fa-youtube"></i></div>
+                <div class="project-links"><a href="https://dealmirror.com/product/youtbeify/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">Youtubeify</h3>
+            <p class="project-desc">Convert YouTube videos into blog posts on your WordPress site using AI — instantly repurpose video content.</p>
+            <div class="project-tags"><span class="ptag">WordPress</span><span class="ptag">AI</span><span class="ptag">YouTube</span></div>
+        </div>
+
+        <div class="project-card reveal delay-1">
+            <div class="project-header">
+                <div class="project-icon wp"><i class="fa-solid fa-ticket"></i></div>
+                <div class="project-links"><a href="https://dealmirror.com/product/atcoupon-smart-coupons-automation-plugin-to-boost-conversion/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">ATCoupon</h3>
+            <p class="project-desc">Smart coupon automation with licensing — intelligently manages discounts to boost WooCommerce conversion rates.</p>
+            <div class="project-tags"><span class="ptag">WordPress</span><span class="ptag">PHP</span></div>
+        </div>
+
+        <div class="project-card reveal delay-2">
+            <div class="project-header">
+                <div class="project-icon wp"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="project-links"><a href="https://dealmirror.com/product/appointiqo/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+            </div>
+            <h3 class="project-title">Appointiqo</h3>
+            <p class="project-desc">Smart WordPress booking plugin with Stripe & Razorpay integration — seamless appointment scheduling.</p>
+            <div class="project-tags"><span class="ptag">WordPress</span><span class="ptag">Stripe</span><span class="ptag">Razorpay</span></div>
+        </div>
+    </div>
+</section>
+
+<footer id="contact">
+    <div class="footer-cta reveal">
+        <h2 class="footer-title">MANAS SHARMA</h2>
+        <p class="footer-subtitle">FULL STACK DEVELOPER · INDIA</p>
         
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            anime({
-                targets: '.bulb-glass',
-                scale: [1, 1.15, 1],
-                duration: 400,
-                easing: 'easeOutElastic(1, .8)'
-            });
-        });
+        <div class="footer-links">
+            <a href="mailto:maxsharmafeb@gmail.com"><i class="fa-solid fa-envelope"></i> maxsharmafeb@gmail.com</a>
+            <a href="https://github.com/ManasFR" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+            <a href="https://in.linkedin.com/in/manas-sharma-3202131b7" target="_blank"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        </div>
+    </div>
+    
+    <div class="footer-bottom reveal delay-1">
+        <p>© 2026 Manas Sharma. All logic reserved. Compiled with precision.</p>
+    </div>
+</footer>
 
-        /* ===== PROJECT GRID ANIMATION ===== */
-        const projectGrids = document.querySelectorAll('.projects-grid');
-        projectGrids.forEach((grid) => {
-            const projectObserver = new IntersectionObserver((entries) => {
-                if(entries[0].isIntersecting) {
-                    anime({
-                        targets: grid.querySelectorAll('.project-card'),
-                        opacity: [0, 1],
-                        translateY: [50, 0],
-                        delay: anime.stagger(100),
-                        duration: 800,
-                        easing: 'spring(1, 80, 10, 0)'
-                    });
-                    projectObserver.disconnect();
-                }
-            }, { threshold: 0.1 });
-            projectObserver.observe(grid);
-        });
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- MOBILE MENU LOGIC ---
+    const mobileBtn = document.getElementById('mobile-btn');
+    const navLinks = document.getElementById('nav-links');
+    const navItems = document.querySelectorAll('.nav-item');
+    const icon = mobileBtn.querySelector('i');
 
-        /* ===== TOOLS GRID ANIMATION ===== */
-        const toolsGrid = document.querySelector('.tools-grid');
-        const toolsObserver = new IntersectionObserver((entries) => {
-            if(entries[0].isIntersecting) {
-                anime({
-                    targets: '.tool-card',
-                    opacity: [0, 1],
-                    translateY: [30, 0],
-                    delay: anime.stagger(80, {grid: [3, 2], from: 'center'}),
-                    duration: 700,
-                    easing: 'easeOutQuart'
-                });
-                toolsObserver.disconnect();
-            }
-        }, { threshold: 0.2 });
-
-        if(toolsGrid) {
-            toolsObserver.observe(toolsGrid);
+    mobileBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        if(navLinks.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        } else {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
         }
+    });
 
-        /* ===== PRELOADER & HERO ===== */
-        const preloaderTimeline = anime.timeline({ easing: 'easeInOutQuad' });
-        preloaderTimeline
-        .add({ targets: '.loader-bar', width: '100%', duration: 1200 })
-        .add({
-            targets: '.preloader',
-            translateY: '-100%',
-            duration: 800,
-            delay: 100,
-            easing: 'easeInExpo',
-            complete: function() {
-                document.querySelector('.preloader').style.display = 'none';
+    // Close mobile menu when clicking a link
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+        });
+    });
+
+    // --- STICKY NAVBAR LOGIC ---
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // --- SMOOTH SCROLL REVEAL ANIMATION ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -50px 0px', // Trigger slightly before it hits the bottom
+        threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); // Only animate once
             }
-        })
-        .add({ targets: '.hero-title .word', translateY: [100, 0], opacity: [0, 1], easing: 'easeOutExpo', duration: 1400, delay: (el, i) => 30 * i, offset: '-=400' })
-        .add({ targets: '.hero-meta', opacity: [0, 1], translateY: [20, 0], duration: 1000, offset: '-=1000' });
+        });
+    }, observerOptions);
 
-        /* ===== SCROLL REVEAL ===== */
-        const revealElements = document.querySelectorAll('.reveal-section');
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    anime({
-                        targets: entry.target,
-                        opacity: [0, 1],
-                        translateY: [50, 0],
-                        duration: 1000,
-                        easing: 'easeOutQuart'
-                    });
-                    sectionObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
 
-        revealElements.forEach(el => { el.style.opacity = 0; sectionObserver.observe(el); });
-
-        /* ===== SKILLS ANIMATION ===== */
-        const skillsObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                anime({
-                    targets: '.skill-card',
-                    opacity: [0, 1],
-                    translateY: [50, 0],
-                    delay: anime.stagger(100, {grid: [3, 2], from: 'center'}),
-                    duration: 800,
-                    easing: 'spring(1, 80, 10, 0)'
-                });
-                skillsObserver.disconnect();
-            }
-        }, { threshold: 0.2 });
-        const skillsGrid = document.querySelector('.skills-grid');
-        if(skillsGrid) skillsObserver.observe(skillsGrid);
-    </script>
 </body>
 </html>
